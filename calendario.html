@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendario de Reuniones</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FullCalendar CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+    <div class="container py-4">
+
+        <!-- Barra de navegación -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm p-3 mb-4">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">Calendario de Reuniones</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
+                        <li class="nav-item"><a class="nav-link" href="admin-usuarios.html">Usuarios</a></li>
+                        <li class="nav-item"><a class="nav-link" href="grupos.html">Grupos</a></li>
+                        <li class="nav-item"><a class="nav-link" href="tareas.html">Tareas</a></li>
+                        <li class="nav-item"><a class="nav-link" href="resumenes.html">Resumenes</a></li>
+                        <li class="nav-item"><a class="nav-link" href="chat.html">Chat</a></li>
+                        <li class="nav-item"><a class="nav-link" href="evaluaciones.html">Evaluaciones</a></li>
+                    </ul>
+                    <div class="d-flex align-items-center">
+                        <span id="user-name" class="me-2">Usuario</span>
+                        <img src="https://via.placeholder.com/40" alt="Foto de perfil" class="rounded-circle">
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Contenido principal -->
+        <div class="container">
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <div id="calendario"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal para detalles de la reunión -->
+        <div class="modal fade" id="modalReunion" tabindex="-1" aria-labelledby="modalReunionLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalReunionLabel">Detalles de la Reunión</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p><strong>Título:</strong> <span id="modalTitulo"></span></p>
+                        <p><strong>Fecha:</strong> <span id="modalFecha"></span></p>
+                        <p><strong>Grupo:</strong> <span id="modalGrupo"></span></p>
+                        <p><strong>Tareas Pendientes:</strong></p>
+                        <ul id="modalTareas" class="list-group"></ul>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FullCalendar JS -->
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/locales/es.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const calendarioEl = document.getElementById('calendario');
+            const reuniones = [];
+            const grupos = ['Interacción Humano Computador', 'Deep Learning', 'Optimización e inteligencia artificial', 'Sistemas de información'];
+            const fechaInicio = new Date('2025-02-01');
+            const fechaFin = new Date('2025-04-30');
+
+            grupos.forEach(grupo => {
+                let fecha = new Date(fechaInicio);
+                while (fecha <= fechaFin) {
+                    reuniones.push({
+                        title: `Reunión de ${grupo}`,
+                        start: new Date(fecha),
+                        end: new Date(fecha.getTime() + 60 * 60 * 1000),
+                        group: grupo,
+                        tareas: [`Tarea 1 de ${grupo}`, `Tarea 2 de ${grupo}`]
+                    });
+                    fecha.setDate(fecha.getDate() + 7);
+                }
+            });
+
+            const calendario = new FullCalendar.Calendar(calendarioEl, {
+                initialView: 'dayGridMonth',
+                locale: 'es',
+                headerToolbar: {
+                    left: 'prev,next today',
+                    center: 'title',
+                    right: 'dayGridMonth,timeGridWeek,timeGridDay'
+                },
+                events: reuniones,
+                eventClick: function (info) {
+                    const evento = info.event;
+                    document.getElementById('modalTitulo').textContent = evento.title;
+                    document.getElementById('modalFecha').textContent = evento.start.toLocaleString();
+                    document.getElementById('modalGrupo').textContent = evento.extendedProps.group;
+
+                    const tareasList = document.getElementById('modalTareas');
+                    tareasList.innerHTML = '';
+                    evento.extendedProps.tareas.forEach(tarea => {
+                        const li = document.createElement('li');
+                        li.className = 'list-group-item';
+                        li.textContent = tarea;
+                        tareasList.appendChild(li);
+                    });
+
+                    const modal = new bootstrap.Modal(document.getElementById('modalReunion'));
+                    modal.show();
+                }
+            });
+
+            calendario.render();
+        });
+    </script>
+</body>
+
+</html>

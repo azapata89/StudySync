@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Tareas</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <div class="container py-4">
+        <!-- Barra de navegación -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm p-3 mb-4">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">Gestión de Tareas</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
+                        <li class="nav-item"><a class="nav-link" href="admin-usuarios.html">Usuarios</a></li>
+                        <li class="nav-item"><a class="nav-link" href="grupos.html">Grupos</a></li>
+                        <li class="nav-item"><a class="nav-link" href="tareas.html">Tareas</a></li>
+                        <li class="nav-item"><a class="nav-link" href="calendario.html">Calendario</a></li>
+                        <li class="nav-item"><a class="nav-link" href="resumenes.html">Resumenes</a></li>
+                        <li class="nav-item"><a class="nav-link" href="chat.html">Chat</a></li>
+                        <li class="nav-item"><a class="nav-link" href="evaluaciones.html">Evaluaciones</a></li>
+                    </ul>
+                    <div class="d-flex align-items-center">
+                        <span id="user-name" class="me-2">Usuario</span>
+                        <img src="https://via.placeholder.com/40" alt="Foto de perfil" class="rounded-circle">
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Contenido principal -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Crear Nueva Tarea</h5>
+                        <form id="crear-tarea-form">
+                            <div class="mb-3">
+                                <input type="text" id="titulo-tarea" class="form-control" placeholder="Título de la tarea" required>
+                            </div>
+                            <div class="mb-3">
+                                <textarea id="descripcion-tarea" class="form-control" placeholder="Descripción de la tarea" required></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <select id="complejidad-tarea" class="form-select" required>
+                                    <option value="">Selecciona la complejidad</option>
+                                    <option value="baja">Baja</option>
+                                    <option value="media">Media</option>
+                                    <option value="alta">Alta</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <input type="date" id="fecha-vencimiento" class="form-control" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Crear Tarea</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Tareas Pendientes</h5>
+                        <div id="tareas-pendientes" class="list-group">
+                            <!-- Las tareas se agregarán aquí dinámicamente -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const crearTareaForm = document.getElementById('crear-tarea-form');
+            const listaTareas = document.getElementById('tareas-pendientes');
+            let tareas = [];
+
+            function renderizarTareas() {
+                listaTareas.innerHTML = '';
+                tareas.forEach((tarea, index) => {
+                    const tareaElement = document.createElement('div');
+                    tareaElement.classList.add('list-group-item');
+                    tareaElement.innerHTML = `
+                        <div>
+                            <h6>${tarea.titulo}</h6>
+                            <p>${tarea.descripcion}</p>
+                            <p><strong>Complejidad:</strong> ${tarea.complejidad}</p>
+                            <p><strong>Fecha de vencimiento:</strong> ${tarea.fecha}</p>
+                        </div>
+                        <div class="d-flex justify-content-end gap-2">
+                            <button class="btn btn-warning btn-sm" onclick="editarTarea(${index})">Editar</button>
+                            <button class="btn btn-danger btn-sm" onclick="eliminarTarea(${index})">Eliminar</button>
+                        </div>
+                    `;
+                    listaTareas.appendChild(tareaElement);
+                });
+            }
+
+            crearTareaForm.addEventListener('submit', function (event) {
+                event.preventDefault();
+                const titulo = document.getElementById('titulo-tarea').value;
+                const descripcion = document.getElementById('descripcion-tarea').value;
+                const complejidad = document.getElementById('complejidad-tarea').value;
+                const fecha = document.getElementById('fecha-vencimiento').value;
+
+                if (titulo && descripcion && complejidad && fecha) {
+                    tareas.push({ titulo, descripcion, complejidad, fecha });
+                    renderizarTareas();
+                    crearTareaForm.reset();
+                } else {
+                    alert('Por favor, completa todos los campos.');
+                }
+            });
+
+            window.eliminarTarea = function (index) {
+                tareas.splice(index, 1);
+                renderizarTareas();
+            };
+
+            window.editarTarea = function (index) {
+                const tarea = tareas[index];
+                document.getElementById('titulo-tarea').value = tarea.titulo;
+                document.getElementById('descripcion-tarea').value = tarea.descripcion;
+                document.getElementById('complejidad-tarea').value = tarea.complejidad;
+                document.getElementById('fecha-vencimiento').value = tarea.fecha;
+                eliminarTarea(index);
+            };
+        });
+    </script>
+</body>
+</html>

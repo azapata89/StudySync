@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <div class="container py-4">
+        <!-- Barra de navegación -->
+        <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm p-3 mb-4 rounded">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">Dashboard</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
+                        <li class="nav-item"><a class="nav-link" href="admin-usuarios.html">Usuarios</a></li>
+                        <li class="nav-item"><a class="nav-link" href="grupos.html">Grupos</a></li>
+                        <li class="nav-item"><a class="nav-link" href="tareas.html">Tareas</a></li>
+                        <li class="nav-item"><a class="nav-link" href="calendario.html">Calendario</a></li>
+                        <li class="nav-item"><a class="nav-link" href="resumenes.html">Resumenes</a></li>
+                        <li class="nav-item"><a class="nav-link" href="chat.html">Chat</a></li>
+                        <li class="nav-item"><a class="nav-link" href="evaluaciones.html">Evaluaciones</a></li>
+                    </ul>
+                    <div class="d-flex align-items-center">
+                        <span id="user-name" class="me-2">Usuario</span>
+                        <img src="https://via.placeholder.com/40" alt="Foto de perfil" class="rounded-circle">
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Contenido principal -->
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Resumen de Actividades</h5>
+                        <p class="card-text">Tareas completadas: <span id="completed-tasks">5</span></p>
+                        <p class="card-text">Reuniones esta semana: <span id="meetings-this-week">3</span></p>
+                        <p class="card-text">Puntos obtenidos: <span id="points-earned">120</span></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Métricas de Participación</h5>
+                        <canvas id="participation-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Eventos Próximos</h5>
+                        <ul id="upcoming-events" class="list-group">
+                            <li class="list-group-item">Reunión de Matemáticas - 10:00 AM</li>
+                            <li class="list-group-item">Entrega de Tarea de Historia - 11:59 PM</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Tareas Pendientes</h5>
+                        <ul id="pending-tasks" class="list-group">
+                            <li class="list-group-item">Terminar ensayo de Literatura</li>
+                            <li class="list-group-item">Estudiar para el examen de Física</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="dashboard.js"></script>
+</body>
+</html>
