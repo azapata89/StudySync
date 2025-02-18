@@ -6,22 +6,109 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Chat Grupal</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <style>
+        .message {
+            max-width: 80%;
+            margin-bottom: 1rem;
+        }
+
+        .message-user {
+            margin-left: auto;
+            background-color: #007bff;
+            color: white;
+        }
+
+        .message-other {
+            margin-right: auto;
+            background-color: #e9ecef;
+        }
+
+        .message-ai {
+            margin-right: auto;
+            background-color: #28a745;
+            color: white;
+        }
+
+        .message-system {
+            width: 100%;
+            background-color: #f8f9fa;
+            text-align: center;
+            font-style: italic;
+        }
+
+        .file-preview {
+            max-width: 200px;
+            max-height: 200px;
+            object-fit: cover;
+        }
+
+        .message-actions {
+            font-size: 0.8rem;
+            opacity: 0.7;
+        }
+
+        .message-actions i {
+            cursor: pointer;
+            margin-left: 0.5rem;
+        }
+
+        .message-actions i:hover {
+            opacity: 1;
+        }
+
+        .typing-indicator {
+            display: none;
+            padding: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            margin-right: 3px;
+            background: #007bff;
+            border-radius: 50%;
+            animation: wave 1.3s linear infinite;
+        }
+
+        .dot:nth-child(2) {
+            animation-delay: -1.1s;
+        }
+
+        .dot:nth-child(3) {
+            animation-delay: -0.9s;
+        }
+
+        @keyframes wave {
+
+            0%,
+            60%,
+            100% {
+                transform: initial;
+            }
+
+            30% {
+                transform: translateY(-10px);
+            }
+        }
+    </style>
 </head>
 
 <body class="bg-light">
     <div class="container py-4">
-
-        <!-- Barra de navegación -->
         <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm p-3 mb-4">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#">Chat Grupal</a>
+                <a class="navbar-brand" href="#">Calendario de Reuniones</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
-                        <li class="nav-item"><a class="nav-link" href="admin-usuarios.html">Usuarios</a></li>
+                        <!-- <li class="nav-item"><a class="nav-link" href="admin-usuarios.html">Usuarios</a></li> -->
                         <li class="nav-item"><a class="nav-link" href="grupos.html">Grupos</a></li>
                         <li class="nav-item"><a class="nav-link" href="tareas.html">Tareas</a></li>
                         <li class="nav-item"><a class="nav-link" href="calendario.html">Calendario</a></li>
@@ -30,47 +117,119 @@
                         <li class="nav-item"><a class="nav-link" href="evaluaciones.html">Evaluaciones</a></li>
                     </ul>
                     <div class="d-flex align-items-center">
-                        <span id="user-name" class="me-2">Usuario</span>
-                        <img src="https://via.placeholder.com/40" alt="Foto de perfil" class="rounded-circle">
+                        <span id="user-name" class="me-2 fw-bold">Usuario</span>
+                        <div class="rounded-circle bg-secondary d-flex justify-content-center align-items-center"
+                            style="width: 40px; height: 40px;">
+                            <i class="bi bi-person text-white"></i>
+                        </div>
                     </div>
                 </div>
             </div>
         </nav>
-
-        <!-- Contenedor principal -->
-        <div class="container">
-            <div class="row">
-                <!-- Lista de conversaciones -->
-                <div class="col-md-4">
-                    <div class="card shadow-sm mb-4">
-                        <div class="card-body">
-                            <h5 class="card-title">Conversaciones</h5>
-                            <ul class="list-group">
-                                <li class="list-group-item list-group-item-action"
-                                    onclick="cargarConversacion('Grupo de Matemáticas')">Grupo de Matemáticas</li>
-                                <li class="list-group-item list-group-item-action"
-                                    onclick="cargarConversacion('Grupo de Física')">Grupo de Física</li>
-                                <li class="list-group-item list-group-item-action"
-                                    onclick="cargarConversacion('Grupo de Historia')">Grupo de Historia</li>
-                            </ul>
+    </div>
+    <!-- Contenedor principal -->
+    <div class="container">
+        <div class="row">
+            <!-- Lista de conversaciones -->
+            <div class="col-md-4">
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">Conversaciones</h5>
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" placeholder="Buscar conversación...">
+                            <button class="btn btn-outline-secondary" type="button">
+                                <i class="bi bi-search"></i>
+                            </button>
                         </div>
+                        <ul class="list-group">
+                            <li class="list-group-item list-group-item-action active d-flex justify-content-between align-items-center"
+                                onclick="cargarConversacion('Grupo de Matemáticas')">
+                                <div>
+                                    <i class="bi bi-people-fill me-2"></i>
+                                    Grupo de Matemáticas
+                                </div>
+                                <span class="badge bg-primary rounded-pill">3</span>
+                            </li>
+                            <li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+                                onclick="cargarConversacion('Grupo de Física')">
+                                <div>
+                                    <i class="bi bi-people me-2"></i>
+                                    Grupo de Física
+                                </div>
+                                <span class="badge bg-secondary rounded-pill">1</span>
+                            </li>
+                            <li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
+                                onclick="cargarConversacion('Grupo de Historia')">
+                                <div>
+                                    <i class="bi bi-people me-2"></i>
+                                    Grupo de Historia
+                                </div>
+                            </li>
+                        </ul>
                     </div>
                 </div>
+            </div>
 
-                <!-- Área de chat -->
-                <div class="col-md-8">
-                    <div class="card shadow-sm">
-                        <div class="card-body d-flex flex-column" style="height: 500px;">
-                            <h5 class="card-title">Chat</h5>
-                            <div id="mensajes" class="border rounded p-3 mb-3 overflow-auto flex-grow-1"
-                                style="height: 350px; background-color: #f8f9fa;"></div>
-                            <form id="formulario-chat" class="d-flex">
-                                <input type="text" id="input-mensaje" class="form-control me-2"
-                                    placeholder="Escribe un mensaje..." required>
-                                <button type="submit" class="btn btn-primary">Enviar</button>
-                            </form>
+            <!-- Área de chat -->
+            <div class="col-md-8">
+                <div class="card shadow-sm">
+                    <div class="card-header bg-white">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0" id="chat-title">Grupo de Matemáticas</h5>
+                            <div>
+                                <button class="btn btn-outline-secondary btn-sm me-2" data-bs-toggle="tooltip"
+                                    title="Ver archivos">
+                                    <i class="bi bi-folder2-open"></i>
+                                </button>
+                                <button class="btn btn-outline-secondary btn-sm" data-bs-toggle="tooltip"
+                                    title="Más opciones">
+                                    <i class="bi bi-three-dots-vertical"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
+                    <div class="card-body d-flex flex-column" style="height: 500px;">
+                        <div id="mensajes" class="border rounded p-3 mb-3 overflow-auto flex-grow-1"
+                            style="height: 350px; background-color: #f8f9fa;">
+                        </div>
+                        <div class="typing-indicator">
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                        </div>
+                        <form id="formulario-chat" class="d-flex flex-column gap-2">
+                            <div class="input-group">
+                                <input type="text" id="input-mensaje" class="form-control"
+                                    placeholder="Escribe un mensaje..." required>
+                                <button type="button" class="btn btn-outline-secondary"
+                                    onclick="mostrarOpcionesArchivo()">
+                                    <i class="bi bi-paperclip"></i>
+                                </button>
+                                <button type="button" class="btn btn-outline-success" onclick="consultarIA()">
+                                    <i class="bi bi-robot"></i>
+                                </button>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-send"></i>
+                                </button>
+                            </div>
+                            <input type="file" id="input-archivo" class="d-none" onchange="manejarArchivo(event)">
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para preview de imágenes -->
+    <div class="modal fade" id="imagenModal" tabindex="-1">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Vista previa</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center">
+                    <img id="imagenPreview" class="img-fluid" src="" alt="Preview">
                 </div>
             </div>
         </div>
@@ -84,28 +243,137 @@
             const inputMensaje = document.getElementById('input-mensaje');
             const mensajesContainer = document.getElementById('mensajes');
 
-            function agregarMensaje(usuario, texto) {
-                const mensajeElement = document.createElement('div');
-                mensajeElement.classList.add('alert', 'alert-secondary', 'mb-2');
-                mensajeElement.innerHTML = `<strong>${usuario}:</strong> ${texto}`;
-                mensajesContainer.appendChild(mensajeElement);
+            // Activar tooltips
+            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+            tooltipTriggerList.map(function (tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl);
+            });
+
+            // Simulación de mensajes
+            const mensajesSimulados = {
+                'Grupo de Matemáticas': [
+                    { tipo: 'system', texto: 'Bienvenido al grupo de Matemáticas' },
+                    { tipo: 'other', usuario: 'Ana', texto: '¿Alguien puede ayudarme con límites?' },
+                    { tipo: 'other', usuario: 'Carlos', texto: 'Claro, ¿qué dudas tienes?' },
+                    { tipo: 'ai', usuario: 'IA Asistente', texto: 'Les comparto un recurso sobre límites: https://ejemplo.com/limites' },
+                    { tipo: 'user', texto: '¡Gracias por la ayuda!' }
+                ],
+                'Grupo de Física': [
+                    { tipo: 'system', texto: 'Bienvenido al grupo de Física' },
+                    { tipo: 'other', usuario: 'María', texto: 'Hoy tenemos práctica de laboratorio' },
+                    { tipo: 'user', texto: '¿A qué hora es la práctica?' }
+                ],
+                'Grupo de Historia': [
+                    { tipo: 'system', texto: 'Bienvenido al grupo de Historia' },
+                    { tipo: 'other', usuario: 'Prof. García', texto: 'Recuerden la entrega del ensayo' }
+                ]
+            };
+
+            function agregarMensaje(tipo, usuario, texto, archivo = null) {
+                const mensajeDiv = document.createElement('div');
+                mensajeDiv.classList.add('message', 'p-3', 'rounded');
+
+                let claseAdicional = '';
+                switch (tipo) {
+                    case 'user': claseAdicional = 'message-user'; break;
+                    case 'other': claseAdicional = 'message-other'; break;
+                    case 'ai': claseAdicional = 'message-ai'; break;
+                    case 'system': claseAdicional = 'message-system'; break;
+                }
+                mensajeDiv.classList.add(claseAdicional);
+
+                let contenido = '';
+                if (tipo !== 'system') {
+                    contenido += `<strong>${usuario}:</strong> `;
+                }
+                contenido += texto;
+
+                if (archivo) {
+                    if (archivo.type.startsWith('image/')) {
+                        contenido += `
+                            <div class="mt-2">
+                                <img src="${URL.createObjectURL(archivo)}" 
+                                     class="file-preview rounded cursor-pointer" 
+                                     onclick="mostrarImagenCompleta('${URL.createObjectURL(archivo)}')"
+                                     alt="Archivo adjunto">
+                            </div>`;
+                    } else {
+                        contenido += `
+                            <div class="mt-2">
+                                <i class="bi bi-file-earmark-text"></i>
+                                ${archivo.name}
+                            </div>`;
+                    }
+                }
+
+                if (tipo !== 'system') {
+                    contenido += `
+                        <div class="message-actions mt-1">
+                            <small>${new Date().toLocaleTimeString()}</small>
+                            <i class="bi bi-reply" onclick="responderMensaje('${usuario}')"></i>
+                            <i class="bi bi-star" onclick="marcarFavorito(this)"></i>
+                        </div>`;
+                }
+
+                mensajeDiv.innerHTML = contenido;
+                mensajesContainer.appendChild(mensajeDiv);
                 mensajesContainer.scrollTop = mensajesContainer.scrollHeight;
             }
 
             window.cargarConversacion = function (grupo) {
+                document.getElementById('chat-title').textContent = grupo;
                 mensajesContainer.innerHTML = '';
-                agregarMensaje('Sistema', `Has entrado al grupo: ${grupo}`);
+                mensajesSimulados[grupo].forEach(mensaje => {
+                    agregarMensaje(mensaje.tipo, mensaje.usuario, mensaje.texto);
+                });
+            };
+
+            window.mostrarOpcionesArchivo = function () {
+                document.getElementById('input-archivo').click();
+            };
+
+            window.manejarArchivo = function (event) {
+                const archivo = event.target.files[0];
+                if (archivo) {
+                    agregarMensaje('user', 'Tú', 'Archivo adjunto:', archivo);
+                }
+            };
+
+            window.mostrarImagenCompleta = function (url) {
+                document.getElementById('imagenPreview').src = url;
+                new bootstrap.Modal(document.getElementById('imagenModal')).show();
+            };
+
+            window.consultarIA = function () {
+                const typingIndicator = document.querySelector('.typing-indicator');
+                typingIndicator.style.display = 'block';
+
+                // Simulación de respuesta de IA
+                setTimeout(() => {
+                    typingIndicator.style.display = 'none';
+                    agregarMensaje('ai', 'IA Asistente', '¿En qué puedo ayudarte con tu consulta?');
+                }, 1500);
+            };
+
+            window.responderMensaje = function (usuario) {
+                inputMensaje.value = `@${usuario} `;
+                inputMensaje.focus();
+            };
+
+            window.marcarFavorito = function (elemento) {
+                elemento.classList.toggle('text-warning');
             };
 
             formularioChat.addEventListener('submit', function (event) {
                 event.preventDefault();
                 const texto = inputMensaje.value.trim();
                 if (texto) {
-                    agregarMensaje('Tú', texto);
+                    agregarMensaje('user', 'Tú', texto);
                     inputMensaje.value = '';
                 }
             });
 
+            // Cargar conversación inicial
             cargarConversacion('Grupo de Matemáticas');
         });
     </script>

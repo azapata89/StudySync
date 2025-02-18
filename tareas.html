@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Tareas</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
 </head>
 <body class="bg-light">
     <div class="container py-4">
@@ -18,7 +19,7 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
-                        <li class="nav-item"><a class="nav-link" href="admin-usuarios.html">Usuarios</a></li>
+                        <!-- <li class="nav-item"><a class="nav-link" href="admin-usuarios.html">Usuarios</a></li> -->
                         <li class="nav-item"><a class="nav-link" href="grupos.html">Grupos</a></li>
                         <li class="nav-item"><a class="nav-link" href="tareas.html">Tareas</a></li>
                         <li class="nav-item"><a class="nav-link" href="calendario.html">Calendario</a></li>
@@ -27,9 +28,11 @@
                         <li class="nav-item"><a class="nav-link" href="evaluaciones.html">Evaluaciones</a></li>
                     </ul>
                     <div class="d-flex align-items-center">
-                        <span id="user-name" class="me-2">Usuario</span>
-                        <img src="https://via.placeholder.com/40" alt="Foto de perfil" class="rounded-circle">
-                    </div>
+    <span id="user-name" class="me-2 fw-bold">Usuario</span>
+    <div class="rounded-circle bg-secondary d-flex justify-content-center align-items-center" style="width: 40px; height: 40px;">
+        <i class="bi bi-person text-white"></i>
+    </div>
+</div>
                 </div>
             </div>
         </nav>
@@ -58,6 +61,16 @@
                             <div class="mb-3">
                                 <input type="date" id="fecha-vencimiento" class="form-control" required>
                             </div>
+                            <div class="mb-3">
+                                <select id="usuario-asignado" class="form-select" required>
+                                    <option value="">Selecciona un usuario</option>
+                                    <option value="Juan Pérez">Juan Pérez</option>
+                                    <option value="María Gómez">María Gómez</option>
+                                    <option value="Carlos López">Carlos López</option>
+                                    <option value="Ana Torres">Ana Torres</option>
+                                    <option value="Luis Ramírez">Luis Ramírez</option>
+                                </select>
+                            </div>
                             <button type="submit" class="btn btn-primary">Crear Tarea</button>
                         </form>
                     </div>
@@ -67,6 +80,14 @@
                 <div class="card mb-4 shadow-sm">
                     <div class="card-body">
                         <h5 class="card-title">Tareas Pendientes</h5>
+                        <!-- Desplegable para seleccionar equipo -->
+                        <select id="equipo-select" class="form-select mb-3">
+                            <option value="">Selecciona un equipo</option>
+                            <option value="equipo1">Equipo de Matemáticas</option>
+                            <option value="equipo2">Equipo de Física</option>
+                            <option value="equipo3">Equipo de Historia</option>
+                        </select>
+                        <!-- Lista de tareas -->
                         <div id="tareas-pendientes" class="list-group">
                             <!-- Las tareas se agregarán aquí dinámicamente -->
                         </div>
@@ -82,11 +103,28 @@
         document.addEventListener('DOMContentLoaded', function () {
             const crearTareaForm = document.getElementById('crear-tarea-form');
             const listaTareas = document.getElementById('tareas-pendientes');
+            const equipoSelect = document.getElementById('equipo-select');
             let tareas = [];
 
-            function renderizarTareas() {
+            // Datos de ejemplo de tareas por equipo
+            const tareasPorEquipo = {
+                equipo1: [
+                    { titulo: 'Resolver ejercicios de álgebra', descripcion: 'Completar los ejercicios 1 al 10', complejidad: 'media', fecha: '2023-11-15', usuario: 'Juan Pérez' },
+                    { titulo: 'Preparar presentación', descripcion: 'Crear diapositivas para la exposición', complejidad: 'alta', fecha: '2023-11-20', usuario: 'María Gómez' }
+                ],
+                equipo2: [
+                    { titulo: 'Estudiar leyes de Newton', descripcion: 'Leer el capítulo 3 del libro', complejidad: 'baja', fecha: '2023-11-18', usuario: 'Carlos López' }
+                ],
+                equipo3: [
+                    { titulo: 'Investigar la Revolución Francesa', descripcion: 'Buscar fuentes confiables', complejidad: 'media', fecha: '2023-11-22', usuario: 'Ana Torres' }
+                ]
+            };
+
+            // Función para renderizar las tareas según el equipo seleccionado
+            function renderizarTareas(equipo) {
                 listaTareas.innerHTML = '';
-                tareas.forEach((tarea, index) => {
+                const tareasEquipo = tareasPorEquipo[equipo] || [];
+                tareasEquipo.forEach((tarea, index) => {
                     const tareaElement = document.createElement('div');
                     tareaElement.classList.add('list-group-item');
                     tareaElement.innerHTML = `
@@ -95,45 +133,60 @@
                             <p>${tarea.descripcion}</p>
                             <p><strong>Complejidad:</strong> ${tarea.complejidad}</p>
                             <p><strong>Fecha de vencimiento:</strong> ${tarea.fecha}</p>
+                            <p><strong>Usuario asignado:</strong> ${tarea.usuario}</p>
                         </div>
                         <div class="d-flex justify-content-end gap-2">
-                            <button class="btn btn-warning btn-sm" onclick="editarTarea(${index})">Editar</button>
-                            <button class="btn btn-danger btn-sm" onclick="eliminarTarea(${index})">Eliminar</button>
+                            <button class="btn btn-warning btn-sm" onclick="editarTarea('${equipo}', ${index})">Editar</button>
+                            <button class="btn btn-danger btn-sm" onclick="eliminarTarea('${equipo}', ${index})">Eliminar</button>
                         </div>
                     `;
                     listaTareas.appendChild(tareaElement);
                 });
             }
 
+            // Escuchar cambios en el menú desplegable de equipos
+            equipoSelect.addEventListener('change', function () {
+                const equipoSeleccionado = equipoSelect.value;
+                renderizarTareas(equipoSeleccionado);
+            });
+
+            // Crear una nueva tarea
             crearTareaForm.addEventListener('submit', function (event) {
                 event.preventDefault();
                 const titulo = document.getElementById('titulo-tarea').value;
                 const descripcion = document.getElementById('descripcion-tarea').value;
                 const complejidad = document.getElementById('complejidad-tarea').value;
                 const fecha = document.getElementById('fecha-vencimiento').value;
+                const usuario = document.getElementById('usuario-asignado').value;
+                const equipoSeleccionado = equipoSelect.value;
 
-                if (titulo && descripcion && complejidad && fecha) {
-                    tareas.push({ titulo, descripcion, complejidad, fecha });
-                    renderizarTareas();
+                if (titulo && descripcion && complejidad && fecha && usuario && equipoSeleccionado) {
+                    tareasPorEquipo[equipoSeleccionado].push({ titulo, descripcion, complejidad, fecha, usuario });
+                    renderizarTareas(equipoSeleccionado);
                     crearTareaForm.reset();
                 } else {
-                    alert('Por favor, completa todos los campos.');
+                    alert('Por favor, completa todos los campos y selecciona un equipo.');
                 }
             });
 
-            window.eliminarTarea = function (index) {
-                tareas.splice(index, 1);
-                renderizarTareas();
+            // Funciones para editar y eliminar tareas
+            window.eliminarTarea = function (equipo, index) {
+                tareasPorEquipo[equipo].splice(index, 1);
+                renderizarTareas(equipo);
             };
 
-            window.editarTarea = function (index) {
-                const tarea = tareas[index];
+            window.editarTarea = function (equipo, index) {
+                const tarea = tareasPorEquipo[equipo][index];
                 document.getElementById('titulo-tarea').value = tarea.titulo;
                 document.getElementById('descripcion-tarea').value = tarea.descripcion;
                 document.getElementById('complejidad-tarea').value = tarea.complejidad;
                 document.getElementById('fecha-vencimiento').value = tarea.fecha;
-                eliminarTarea(index);
+                document.getElementById('usuario-asignado').value = tarea.usuario;
+                eliminarTarea(equipo, index);
             };
+
+            // Renderizar tareas iniciales
+            renderizarTareas(equipoSelect.value);
         });
     </script>
 </body>

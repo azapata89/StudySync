@@ -4,18 +4,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calendario de Reuniones</title>
-    <!-- Bootstrap CSS -->
+    <title>Calendario Multi-agenda</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- FullCalendar CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
     <link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.css" rel="stylesheet">
+    <style>
+        .fc-event {
+            cursor: pointer;
+        }
+        .disponibilidad-comun {
+            background-color: #90EE90 !important;
+            border-color: #32CD32 !important;
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-right: 15px;
+        }
+        .color-box {
+            width: 20px;
+            height: 20px;
+            margin-right: 5px;
+            border-radius: 3px;
+        }
+    </style>
 </head>
 
 <body class="bg-light">
     <div class="container py-4">
-
-        <!-- Barra de navegación -->
-        <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm p-3 mb-4">
+         <!-- Barra de navegación -->
+         <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm p-3 mb-4">
             <div class="container-fluid">
                 <a class="navbar-brand" href="#">Calendario de Reuniones</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
@@ -24,44 +42,71 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
-                        <li class="nav-item"><a class="nav-link" href="admin-usuarios.html">Usuarios</a></li>
+                        <!-- <li class="nav-item"><a class="nav-link" href="admin-usuarios.html">Usuarios</a></li> -->
                         <li class="nav-item"><a class="nav-link" href="grupos.html">Grupos</a></li>
                         <li class="nav-item"><a class="nav-link" href="tareas.html">Tareas</a></li>
-                        <li class="nav-item"><a class="nav-link" href="resumenes.html">Resumenes</a></li>
+                        <li class="nav-item"><a class="nav-link" href="calendario.html">Calendario</a></li>
+                        <li class="nav-item"><a class="nav-link" href="resumenes.html">Resúmenes</a></li>
                         <li class="nav-item"><a class="nav-link" href="chat.html">Chat</a></li>
                         <li class="nav-item"><a class="nav-link" href="evaluaciones.html">Evaluaciones</a></li>
                     </ul>
                     <div class="d-flex align-items-center">
-                        <span id="user-name" class="me-2">Usuario</span>
-                        <img src="https://via.placeholder.com/40" alt="Foto de perfil" class="rounded-circle">
+                        <span id="user-name" class="me-2 fw-bold">Usuario</span>
+                        <div class="rounded-circle bg-secondary d-flex justify-content-center align-items-center" style="width: 40px; height: 40px;">
+                            <i class="bi bi-person text-white"></i>
+                        </div>
                     </div>
                 </div>
             </div>
         </nav>
 
-        <!-- Contenido principal -->
-        <div class="container">
-            <div class="card shadow-sm mb-4">
-                <div class="card-body">
-                    <div id="calendario"></div>
+        <!-- Controles de filtrado -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <h5>Personas</h5>
+                        <div id="personas-checkboxes" class="mb-3">
+                            <!-- Checkboxes generados dinámicamente -->
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Leyenda</h5>
+                        <div class="d-flex flex-wrap" id="calendario-leyenda">
+                            <!-- Leyenda generada dinámicamente -->
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <button id="buscarEspaciosComunes" class="btn btn-primary">
+                            Buscar Espacios Comunes
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
 
-        <!-- Modal para detalles de la reunión -->
-        <div class="modal fade" id="modalReunion" tabindex="-1" aria-labelledby="modalReunionLabel" aria-hidden="true">
+        <!-- Calendario -->
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <div id="calendario"></div>
+            </div>
+        </div>
+
+        <!-- Modal para detalles del evento -->
+        <div class="modal fade" id="modalEvento" tabindex="-1">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="modalReunionLabel">Detalles de la Reunión</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        <h5 class="modal-title">Detalles del Evento</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
                         <p><strong>Título:</strong> <span id="modalTitulo"></span></p>
+                        <p><strong>Persona:</strong> <span id="modalPersona"></span></p>
                         <p><strong>Fecha:</strong> <span id="modalFecha"></span></p>
-                        <p><strong>Grupo:</strong> <span id="modalGrupo"></span></p>
-                        <p><strong>Tareas Pendientes:</strong></p>
-                        <ul id="modalTareas" class="list-group"></ul>
+                        <p><strong>Descripción:</strong> <span id="modalDescripcion"></span></p>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -69,67 +114,338 @@
                 </div>
             </div>
         </div>
+
+        <!-- Modal para agendar nueva cita -->
+        <div class="modal fade" id="modalNuevaCita" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Agendar Nueva Cita</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="formNuevaCita">
+                            <div class="mb-3">
+                                <label for="tituloCita" class="form-label">Título de la cita</label>
+                                <input type="text" class="form-control" id="tituloCita" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="descripcionCita" class="form-label">Descripción</label>
+                                <textarea class="form-control" id="descripcionCita" rows="3"></textarea>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Participantes</label>
+                                <div id="participantesCita" class="list-group">
+                                    <!-- Lista de participantes generada dinámicamente -->
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label">Horario</label>
+                                <p id="horarioCita" class="text-muted"></p>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-primary" id="guardarCita">Guardar Cita</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <!-- FullCalendar JS -->
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/main.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.11.3/locales/es.min.js"></script>
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const calendarioEl = document.getElementById('calendario');
-            const reuniones = [];
-            const grupos = ['Interacción Humano Computador', 'Deep Learning', 'Optimización e inteligencia artificial', 'Sistemas de información'];
-            const fechaInicio = new Date('2025-02-01');
-            const fechaFin = new Date('2025-04-30');
+        document.addEventListener('DOMContentLoaded', function() {
+            // Datos de ejemplo
+            const personas = [
+                { id: 1, nombre: 'Ana García', color: '#FF6B6B' },
+                { id: 2, nombre: 'Carlos López', color: '#4ECDC4' },
+                { id: 3, nombre: 'María Rodríguez', color: '#95A5A6' },
+                { id: 4, nombre: 'Juan Martínez', color: '#F7D794' }
+            ];
 
-            grupos.forEach(grupo => {
-                let fecha = new Date(fechaInicio);
-                while (fecha <= fechaFin) {
-                    reuniones.push({
-                        title: `Reunión de ${grupo}`,
-                        start: new Date(fecha),
-                        end: new Date(fecha.getTime() + 60 * 60 * 1000),
-                        group: grupo,
-                        tareas: [`Tarea 1 de ${grupo}`, `Tarea 2 de ${grupo}`]
-                    });
-                    fecha.setDate(fecha.getDate() + 7);
-                }
+            // Generar eventos aleatorios para cada persona
+            const eventos = generarEventosAleatorios(personas);
+
+            // Generar checkboxes para filtrar por persona
+            const checkboxesContainer = document.getElementById('personas-checkboxes');
+            personas.forEach(persona => {
+                const div = document.createElement('div');
+                div.className = 'form-check';
+                div.innerHTML = `
+                    <input class="form-check-input persona-checkbox" type="checkbox" 
+                           value="${persona.id}" id="persona${persona.id}" checked>
+                    <label class="form-check-label" for="persona${persona.id}">
+                        ${persona.nombre}
+                    </label>
+                `;
+                checkboxesContainer.appendChild(div);
             });
 
+            // Generar leyenda
+            const leyendaContainer = document.getElementById('calendario-leyenda');
+            personas.forEach(persona => {
+                const div = document.createElement('div');
+                div.className = 'legend-item';
+                div.innerHTML = `
+                    <div class="color-box" style="background-color: ${persona.color}"></div>
+                    <span>${persona.nombre}</span>
+                `;
+                leyendaContainer.appendChild(div);
+            });
+
+            // Configurar calendario
+            const calendarioEl = document.getElementById('calendario');
             const calendario = new FullCalendar.Calendar(calendarioEl, {
-                initialView: 'dayGridMonth',
+                initialView: 'timeGridWeek',
                 locale: 'es',
                 headerToolbar: {
                     left: 'prev,next today',
                     center: 'title',
                     right: 'dayGridMonth,timeGridWeek,timeGridDay'
                 },
-                events: reuniones,
-                eventClick: function (info) {
-                    const evento = info.event;
-                    document.getElementById('modalTitulo').textContent = evento.title;
-                    document.getElementById('modalFecha').textContent = evento.start.toLocaleString();
-                    document.getElementById('modalGrupo').textContent = evento.extendedProps.group;
-
-                    const tareasList = document.getElementById('modalTareas');
-                    tareasList.innerHTML = '';
-                    evento.extendedProps.tareas.forEach(tarea => {
-                        const li = document.createElement('li');
-                        li.className = 'list-group-item';
-                        li.textContent = tarea;
-                        tareasList.appendChild(li);
-                    });
-
-                    const modal = new bootstrap.Modal(document.getElementById('modalReunion'));
-                    modal.show();
+                slotMinTime: '08:00:00',
+                slotMaxTime: '20:00:00',
+                events: eventos,
+                eventClick: mostrarDetallesEvento,
+                eventContent: function(arg) {
+                    return {
+                        html: `<div class="fc-event-main-frame">
+                                <div class="fc-event-title-container">
+                                    <div class="fc-event-title">${arg.event.title}</div>
+                                    <div class="fc-event-time">${arg.timeText}</div>
+                                </div>
+                            </div>`
+                    };
                 }
             });
 
             calendario.render();
+
+            // Manejar filtrado de eventos
+            document.querySelectorAll('.persona-checkbox').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    actualizarEventosVisibles();
+                });
+            });
+
+            // Buscar espacios comunes
+            document.getElementById('buscarEspaciosComunes').addEventListener('click', function() {
+                const personasSeleccionadas = Array.from(document.querySelectorAll('.persona-checkbox:checked'))
+                    .map(cb => parseInt(cb.value));
+                
+                if (personasSeleccionadas.length < 2) {
+                    alert('Selecciona al menos 2 personas para buscar espacios comunes');
+                    return;
+                }
+
+                const espaciosComunes = encontrarEspaciosComunes(eventos, personasSeleccionadas);
+                mostrarEspaciosComunes(espaciosComunes, calendario);
+            });
+
+            function actualizarEventosVisibles() {
+                const personasSeleccionadas = Array.from(document.querySelectorAll('.persona-checkbox:checked'))
+                    .map(cb => parseInt(cb.value));
+
+                calendario.getEvents().forEach(evento => {
+                    if (personasSeleccionadas.includes(evento.extendedProps.personaId)) {
+                        evento.setProp('display', 'auto');
+                    } else {
+                        evento.setProp('display', 'none');
+                    }
+                });
+            }
+
+            function mostrarDetallesEvento(info) {
+                const evento = info.event;
+                const persona = personas.find(p => p.id === evento.extendedProps.personaId);
+
+                document.getElementById('modalTitulo').textContent = evento.title;
+                document.getElementById('modalPersona').textContent = persona.nombre;
+                document.getElementById('modalFecha').textContent = evento.start.toLocaleString();
+                document.getElementById('modalDescripcion').textContent = evento.extendedProps.descripcion || 'Sin descripción';
+
+                const modal = new bootstrap.Modal(document.getElementById('modalEvento'));
+                modal.show();
+            }
+
+            function generarEventosAleatorios(personas) {
+                const eventos = [];
+                const fechaInicio = new Date('2025-02-17');
+                const diasSimulacion = 14;
+
+                personas.forEach(persona => {
+                    for (let i = 0; i < diasSimulacion; i++) {
+                        const numEventos = Math.floor(Math.random() * 3) + 1; // 1-3 eventos por día
+                        
+                        for (let j = 0; j < numEventos; j++) {
+                            const fecha = new Date(fechaInicio);
+                            fecha.setDate(fecha.getDate() + i);
+                            
+                            const horaInicio = 8 + Math.floor(Math.random() * 8); // Entre 8 y 15
+                            fecha.setHours(horaInicio, 0, 0);
+                            
+                            const duracion = Math.floor(Math.random() * 3) + 1; // 1-3 horas
+                            const fechaFin = new Date(fecha);
+                            fechaFin.setHours(fecha.getHours() + duracion);
+
+                            eventos.push({
+                                title: `Reunión - ${persona.nombre}`,
+                                start: fecha,
+                                end: fechaFin,
+                                backgroundColor: persona.color,
+                                borderColor: persona.color,
+                                extendedProps: {
+                                    personaId: persona.id,
+                                    descripcion: `Reunión ${j + 1} del día para ${persona.nombre}`
+                                }
+                            });
+                        }
+                    }
+                });
+
+                return eventos;
+            }
+
+            function encontrarEspaciosComunes(eventos, personasSeleccionadas) {
+                const espaciosComunes = [];
+                const fechaInicio = new Date('2025-02-17');
+                const fechaFin = new Date('2025-03-03');
+                
+                for (let fecha = new Date(fechaInicio); fecha <= fechaFin; fecha.setDate(fecha.getDate() + 1)) {
+                    for (let hora = 8; hora < 17; hora++) { // 8:00 - 17:00
+                        const horaInicio = new Date(fecha);
+                        horaInicio.setHours(hora, 0, 0);
+                        const horaFin = new Date(fecha);
+                        horaFin.setHours(hora + 1, 0, 0);
+
+                        const hayConflicto = personasSeleccionadas.some(personaId => {
+                            return eventos.some(evento => {
+                                if (evento.extendedProps.personaId !== personaId) return false;
+                                return (evento.start < horaFin && evento.end > horaInicio);
+                            });
+                        });
+
+                        if (!hayConflicto) {
+                            espaciosComunes.push({
+                                start: horaInicio,
+                                end: horaFin
+                            });
+                        }
+                    }
+                }
+
+                return espaciosComunes;
+            }
+
+            function mostrarEspaciosComunes(espacios, calendario) {
+                // Eliminar espacios comunes anteriores
+                calendario.getEvents().forEach(evento => {
+                    if (evento.extendedProps.tipo === 'espacio-comun') {
+                        evento.remove();
+                    }
+                });
+
+                // Agregar nuevos espacios comunes
+                espacios.forEach(espacio => {
+                    calendario.addEvent({
+                        title: 'Espacio Disponible',
+                        start: espacio.start,
+                        end: espacio.end,
+                        className: 'disponibilidad-comun',
+                        extendedProps: {
+                            tipo: 'espacio-comun',
+                            descripcion: 'Horario disponible para todos los participantes seleccionados'
+                        },
+                        click: abrirModalNuevaCita
+                    });
+                });
+
+                // Actualizar el manejador de eventos para espacios disponibles
+                calendario.setOption('eventClick', function(info) {
+                    if (info.event.extendedProps.tipo === 'espacio-comun') {
+                        abrirModalNuevaCita(info);
+                    } else {
+                        mostrarDetallesEvento(info);
+                    }
+                });
+            }
+
+            function abrirModalNuevaCita(info) {
+                const evento = info.event;
+                const personasSeleccionadas = Array.from(document.querySelectorAll('.persona-checkbox:checked'))
+                    .map(cb => parseInt(cb.value));
+                
+                // Actualizar el horario en el modal
+                const horarioTexto = `${evento.start.toLocaleTimeString()} - ${evento.end.toLocaleTimeString()}`;
+                document.getElementById('horarioCita').textContent = `${evento.start.toLocaleDateString()} ${horarioTexto}`;
+
+                // Generar lista de participantes
+                const participantesContainer = document.getElementById('participantesCita');
+                participantesContainer.innerHTML = '';
+                
+                personas.forEach(persona => {
+                    if (personasSeleccionadas.includes(persona.id)) {
+                        const div = document.createElement('div');
+                        div.className = 'list-group-item';
+                        div.innerHTML = `
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <span class="color-box d-inline-block me-2" style="background-color: ${persona.color}"></span>
+                                    ${persona.nombre}
+                                </div>
+                                <input type="checkbox" class="form-check-input" checked disabled>
+                            </div>
+                        `;
+                        participantesContainer.appendChild(div);
+                    }
+                });
+
+                // Configurar el botón de guardar
+                const guardarBtn = document.getElementById('guardarCita');
+                guardarBtn.onclick = function() {
+                    const titulo = document.getElementById('tituloCita').value;
+                    const descripcion = document.getElementById('descripcionCita').value;
+                    
+                    if (!titulo) {
+                        alert('Por favor, ingrese un título para la cita');
+                        return;
+                    }
+
+                    // Crear eventos para cada participante
+                    personasSeleccionadas.forEach(personaId => {
+                        const persona = personas.find(p => p.id === personaId);
+                        calendario.addEvent({
+                            title: titulo,
+                            start: evento.start,
+                            end: evento.end,
+                            backgroundColor: persona.color,
+                            borderColor: persona.color,
+                            extendedProps: {
+                                personaId: persona.id,
+                                descripcion: descripcion,
+                                participantes: personasSeleccionadas
+                            }
+                        });
+                    });
+
+                    // Cerrar el modal y limpiar el formulario
+                    document.getElementById('formNuevaCita').reset();
+                    bootstrap.Modal.getInstance(document.getElementById('modalNuevaCita')).hide();
+                    
+                    // Eliminar el espacio disponible
+                    evento.remove();
+                };
+
+                // Mostrar el modal
+                const modal = new bootstrap.Modal(document.getElementById('modalNuevaCita'));
+                modal.show();
+            }
         });
     </script>
 </body>
-
 </html>

@@ -1,13 +1,22 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Grupos</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <style>
+        /* Estilos personalizados para las listas con scroll */
+        .scrollable-list {
+            max-height: 300px; /* Altura máxima */
+            overflow-y: auto;  /* Scroll vertical */
+            border: 1px solid #ddd; /* Borde para mejor apariencia */
+            border-radius: 0.25rem; /* Bordes redondeados */
+            padding: 10px; /* Espaciado interno */
+        }
+    </style>
 </head>
-
 <body class="bg-light">
     <div class="container py-4">
         <!-- Barra de navegación -->
@@ -20,7 +29,7 @@
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav me-auto">
                         <li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
-                        <li class="nav-item"><a class="nav-link" href="admin-usuarios.html">Usuarios</a></li>
+                        <!-- <li class="nav-item"><a class="nav-link" href="admin-usuarios.html">Usuarios</a></li> -->
                         <li class="nav-item"><a class="nav-link" href="grupos.html">Grupos</a></li>
                         <li class="nav-item"><a class="nav-link" href="tareas.html">Tareas</a></li>
                         <li class="nav-item"><a class="nav-link" href="calendario.html">Calendario</a></li>
@@ -29,8 +38,10 @@
                         <li class="nav-item"><a class="nav-link" href="evaluaciones.html">Evaluaciones</a></li>
                     </ul>
                     <div class="d-flex align-items-center">
-                        <span id="user-name" class="me-2">Usuario</span>
-                        <img src="https://via.placeholder.com/40" alt="Foto de perfil" class="rounded-circle">
+                        <span id="user-name" class="me-2 fw-bold">Usuario</span>
+                        <div class="rounded-circle bg-secondary d-flex justify-content-center align-items-center" style="width: 40px; height: 40px;">
+                            <i class="bi bi-person text-white"></i>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -38,29 +49,8 @@
 
         <!-- Contenido principal -->
         <div class="row">
+            <!-- Sección para crear un nuevo grupo -->
             <div class="col-md-6">
-                <div class="card mb-4 shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">Seleccionar Materia</h5>
-                        <select id="materias" class="form-select">
-                            <option value="">Selecciona una materia</option>
-                            <option value="matematicas">Matemáticas</option>
-                            <option value="fisica">Física</option>
-                            <option value="historia">Historia</option>
-                            <option value="literatura">Literatura</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="card mb-4 shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">Unirse a Grupo Existente</h5>
-                        <p id="grupos-disponibles" class="text-muted">Selecciona una materia para ver los grupos disponibles.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-12">
                 <div class="card mb-4 shadow-sm">
                     <div class="card-body">
                         <h5 class="card-title">Crear Nuevo Grupo</h5>
@@ -79,12 +69,188 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Sección para unirse a un grupo existente -->
+            <div class="col-md-6">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Unirse a un Grupo Existente</h5>
+                        <!-- Buscador de grupos (solo estético) -->
+                        <div class="mb-3">
+                            <input type="text" id="buscar-grupo" class="form-control" placeholder="Buscar grupo...">
+                        </div>
+                        <!-- Lista de grupos con scroll -->
+                        <div id="lista-grupos" class="list-group scrollable-list">
+                            <div class="list-group-item">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6>Grupo de Matemáticas</h6>
+                                        <p><strong>Descripción:</strong> Estudio avanzado de álgebra y cálculo.</p>
+                                        <p><strong>Horario:</strong> Lunes y Miércoles 10:00 AM</p>
+                                        <p><strong>Miembros:</strong> 5</p>
+                                        <p><strong>Compatibilidad:</strong> 85%</p>
+                                    </div>
+                                    <button class="btn btn-primary btn-sm" onclick="alert('Has solicitado acceso al grupo: Grupo de Matemáticas')">Solicitar Acceso</button>
+                                </div>
+                            </div>
+                            <div class="list-group-item">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6>Grupo de Física</h6>
+                                        <p><strong>Descripción:</strong> Discusión de temas de mecánica y termodinámica.</p>
+                                        <p><strong>Horario:</strong> Martes y Jueves 2:00 PM</p>
+                                        <p><strong>Miembros:</strong> 3</p>
+                                        <p><strong>Compatibilidad:</strong> 75%</p>
+                                    </div>
+                                    <button class="btn btn-primary btn-sm" onclick="alert('Has solicitado acceso al grupo: Grupo de Física')">Solicitar Acceso</button>
+                                </div>
+                            </div>
+                            <div class="list-group-item">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6>Grupo de Historia</h6>
+                                        <p><strong>Descripción:</strong> Análisis de eventos históricos y su impacto.</p>
+                                        <p><strong>Horario:</strong> Viernes 4:00 PM</p>
+                                        <p><strong>Miembros:</strong> 4</p>
+                                        <p><strong>Compatibilidad:</strong> 90%</p>
+                                    </div>
+                                    <button class="btn btn-primary btn-sm" onclick="alert('Has solicitado acceso al grupo: Grupo de Historia')">Solicitar Acceso</button>
+                                </div>
+                            </div>
+                            <!-- Más grupos de ejemplo -->
+                            <div class="list-group-item">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6>Grupo de Literatura</h6>
+                                        <p><strong>Descripción:</strong> Análisis de obras literarias clásicas.</p>
+                                        <p><strong>Horario:</strong> Miércoles 6:00 PM</p>
+                                        <p><strong>Miembros:</strong> 6</p>
+                                        <p><strong>Compatibilidad:</strong> 80%</p>
+                                    </div>
+                                    <button class="btn btn-primary btn-sm" onclick="alert('Has solicitado acceso al grupo: Grupo de Literatura')">Solicitar Acceso</button>
+                                </div>
+                            </div>
+                            <div class="list-group-item">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6>Grupo de Programación</h6>
+                                        <p><strong>Descripción:</strong> Resolución de problemas de programación.</p>
+                                        <p><strong>Horario:</strong> Jueves 3:00 PM</p>
+                                        <p><strong>Miembros:</strong> 7</p>
+                                        <p><strong>Compatibilidad:</strong> 95%</p>
+                                    </div>
+                                    <button class="btn btn-primary btn-sm" onclick="alert('Has solicitado acceso al grupo: Grupo de Programación')">Solicitar Acceso</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sección para invitar usuarios al grupo -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card mb-4 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">Invitar Usuarios al Grupo</h5>
+                        
+                        <!-- Selector de grupos -->
+                        <div class="mb-3">
+                            <label for="select-grupo" class="form-label">Seleccionar Grupo</label>
+                            <select id="select-grupo" class="form-select">
+                                <option value="Grupo de Matemáticas">Grupo de Matemáticas</option>
+                                <option value="Grupo de Física">Grupo de Física</option>
+                                <option value="Grupo de Historia">Grupo de Historia</option>
+                                <option value="Grupo de Literatura">Grupo de Literatura</option>
+                                <option value="Grupo de Programación">Grupo de Programación</option>
+                            </select>
+                        </div>
+
+                        <!-- Buscador de usuarios (solo estético) -->
+                        <div class="mb-3">
+                            <input type="text" id="buscar-usuario" class="form-control" placeholder="Buscar usuario...">
+                        </div>
+
+                        <!-- Lista de usuarios con scroll -->
+                        <div id="lista-usuarios" class="list-group scrollable-list">
+                            <div class="list-group-item">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6>Juan Pérez</h6>
+                                        <p><strong>Actividades:</strong> 15</p>
+                                        <p><strong>Logros:</strong> Mejor estudiante de Matemáticas, Participación destacada en Física</p>
+                                        <p><strong>Participación:</strong> 80%</p>
+                                        <p><strong>Compatibilidad:</strong> 85%</p>
+                                    </div>
+                                    <button class="btn btn-primary btn-sm" onclick="invitarUsuario('Juan Pérez')">Invitar</button>
+                                </div>
+                            </div>
+                            <div class="list-group-item">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6>María Gómez</h6>
+                                        <p><strong>Actividades:</strong> 10</p>
+                                        <p><strong>Logros:</strong> Líder del grupo de Historia, Participación activa en Chat</p>
+                                        <p><strong>Participación:</strong> 90%</p>
+                                        <p><strong>Compatibilidad:</strong> 90%</p>
+                                    </div>
+                                    <button class="btn btn-primary btn-sm" onclick="invitarUsuario('María Gómez')">Invitar</button>
+                                </div>
+                            </div>
+                            <div class="list-group-item">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6>Carlos López</h6>
+                                        <p><strong>Actividades:</strong> 5</p>
+                                        <p><strong>Logros:</strong> Colaborador en Tareas, Asistencia perfecta</p>
+                                        <p><strong>Participación:</strong> 70%</p>
+                                        <p><strong>Compatibilidad:</strong> 75%</p>
+                                    </div>
+                                    <button class="btn btn-primary btn-sm" onclick="invitarUsuario('Carlos López')">Invitar</button>
+                                </div>
+                            </div>
+                            <!-- Más usuarios de ejemplo -->
+                            <div class="list-group-item">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6>Ana Torres</h6>
+                                        <p><strong>Actividades:</strong> 12</p>
+                                        <p><strong>Logros:</strong> Mejor presentación de Física, Participación destacada en Chat</p>
+                                        <p><strong>Participación:</strong> 85%</p>
+                                        <p><strong>Compatibilidad:</strong> 88%</p>
+                                    </div>
+                                    <button class="btn btn-primary btn-sm" onclick="invitarUsuario('Ana Torres')">Invitar</button>
+                                </div>
+                            </div>
+                            <div class="list-group-item">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6>Luis Ramírez</h6>
+                                        <p><strong>Actividades:</strong> 8</p>
+                                        <p><strong>Logros:</strong> Colaborador en Tareas, Asistencia perfecta</p>
+                                        <p><strong>Participación:</strong> 75%</p>
+                                        <p><strong>Compatibilidad:</strong> 80%</p>
+                                    </div>
+                                    <button class="btn btn-primary btn-sm" onclick="invitarUsuario('Luis Ramírez')">Invitar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="grupos.js"></script>
-</body>
 
+    <!-- Script para manejar la invitación -->
+    <script>
+        function invitarUsuario(nombreUsuario) {
+            const grupoSeleccionado = document.getElementById('select-grupo').value;
+            alert(`Invitación enviada a ${nombreUsuario} para unirse al grupo: ${grupoSeleccionado}`);
+        }
+    </script>
+</body>
 </html>
