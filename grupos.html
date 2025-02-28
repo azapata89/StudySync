@@ -1,256 +1,1181 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestión de Grupos</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <title>Gestión de Grupos | Estudio Colectivo UNAL</title>
+    <!-- Fuentes de Material Design -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- CSS de Material Design 3 -->
+    <link rel="stylesheet" href="material-study.css">
+    <!-- Estilos específicos para Grupos -->
     <style>
-        /* Estilos personalizados para las listas con scroll */
-        .scrollable-list {
-            max-height: 300px; /* Altura máxima */
-            overflow-y: auto;  /* Scroll vertical */
-            border: 1px solid #ddd; /* Borde para mejor apariencia */
-            border-radius: 0.25rem; /* Bordes redondeados */
-            padding: 10px; /* Espaciado interno */
+        .groups-content {
+            padding: var(--md-spacing-large) 0;
+        }
+
+        .group-card {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .group-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--md-elevation-3);
+        }
+
+        .group-card__header {
+            display: flex;
+            align-items: center;
+            margin-bottom: var(--md-spacing-medium);
+        }
+
+        .group-card__icon {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--md-primary-90);
+            border-radius: 50%;
+            margin-right: var(--md-spacing-medium);
+        }
+
+        .group-card__icon .material-icons {
+            color: var(--md-primary-40);
+            font-size: 24px;
+        }
+
+        .group-card__title {
+            font-size: var(--md-title-medium);
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .group-card__subtitle {
+            font-size: var(--md-body-medium);
+            color: var(--md-on-surface-variant);
+        }
+
+        .group-card__content {
+            flex-grow: 1;
+            margin-bottom: var(--md-spacing-medium);
+        }
+
+        .group-card__stats {
+            display: flex;
+            gap: var(--md-spacing-medium);
+            margin-bottom: var(--md-spacing-medium);
+        }
+
+        .group-card__stat {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .group-card__stat-value {
+            font-size: var(--md-title-large);
+            font-weight: 500;
+            color: var(--md-primary-50);
+        }
+
+        .group-card__stat-label {
+            font-size: var(--md-body-small);
+            color: var(--md-on-surface-variant);
+        }
+
+        .group-card__tag {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: var(--md-body-small);
+            background-color: var(--md-primary-90);
+            color: var(--md-primary-40);
+            margin-right: var(--md-spacing-small);
+            margin-bottom: var(--md-spacing-small);
+        }
+
+        .group-card__actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: var(--md-spacing-small);
+            margin-top: auto;
+        }
+
+        .user-avatar-list {
+            display: flex;
+            margin-top: var(--md-spacing-medium);
+        }
+
+        .user-avatar-list__item {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: var(--md-secondary-80);
+            color: var(--md-secondary-40);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 500;
+            font-size: 14px;
+            margin-right: -8px;
+            border: 2px solid var(--md-surface);
+        }
+
+        .user-avatar-list__more {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: var(--md-surface-variant);
+            color: var(--md-on-surface-variant);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 500;
+            font-size: 12px;
+            border: 2px solid var(--md-surface);
+        }
+
+        .create-group-card {
+            height: 100%;
+            border: 2px dashed var(--md-primary-80);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--md-primary-95);
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .create-group-card:hover {
+            background-color: var(--md-primary-90);
+        }
+
+        .create-group-card__icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background-color: var(--md-primary-80);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: var(--md-spacing-medium);
+        }
+
+        .create-group-card__icon .material-icons {
+            font-size: 32px;
+            color: var(--md-primary-40);
+        }
+
+        .create-group-card__text {
+            font-size: var(--md-body-large);
+            font-weight: 500;
+            color: var(--md-primary-40);
+            text-align: center;
+        }
+
+        .filter-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: var(--md-spacing-small);
+            margin-bottom: var(--md-spacing-large);
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background-color: var(--md-surface);
+            border-radius: var(--md-radius-medium);
+            padding: 0 var(--md-spacing-medium);
+            box-shadow: var(--md-elevation-1);
+            margin-bottom: var(--md-spacing-large);
+            height: 48px;
+        }
+
+        .search-bar__icon {
+            color: var(--md-on-surface-variant);
+            margin-right: var(--md-spacing-small);
+        }
+
+        .search-bar__input {
+            border: none;
+            background: transparent;
+            flex-grow: 1;
+            height: 100%;
+            font-size: var(--md-body-large);
+            color: var(--md-on-surface);
+        }
+
+        .search-bar__input:focus {
+            outline: none;
+        }
+
+        .search-bar__actions {
+            display: flex;
+            gap: var(--md-spacing-small);
+        }
+
+        /* Diálogo de creación de grupo */
+        .group-form {
+            display: flex;
+            flex-direction: column;
+            gap: var(--md-spacing-medium);
+        }
+
+        .group-form__section {
+            margin-bottom: var(--md-spacing-medium);
+        }
+
+        .group-form__section-title {
+            font-size: var(--md-title-small);
+            font-weight: 500;
+            margin-bottom: var(--md-spacing-small);
+            color: var(--md-on-surface-variant);
+        }
+
+        /* Animaciones */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .animate-fadeIn {
+            animation: fadeIn 0.3s ease forwards;
+        }
+
+        .animate-delay-1 {
+            animation-delay: 0.1s;
+        }
+
+        .animate-delay-2 {
+            animation-delay: 0.2s;
+        }
+
+        .animate-delay-3 {
+            animation-delay: 0.3s;
         }
     </style>
 </head>
-<body class="bg-light">
-    <div class="container py-4">
-        <!-- Barra de navegación -->
-        <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm p-3 mb-4">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="#">Gestión de Grupos</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav me-auto">
-                        <li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
-                        <!-- <li class="nav-item"><a class="nav-link" href="admin-usuarios.html">Usuarios</a></li> -->
-                        <li class="nav-item"><a class="nav-link" href="grupos.html">Grupos</a></li>
-                        <li class="nav-item"><a class="nav-link" href="tareas.html">Tareas</a></li>
-                        <li class="nav-item"><a class="nav-link" href="calendario.html">Calendario</a></li>
-                        <li class="nav-item"><a class="nav-link" href="resumenes.html">Resumenes</a></li>
-                        <li class="nav-item"><a class="nav-link" href="chat.html">Chat</a></li>
-                        <li class="nav-item"><a class="nav-link" href="evaluaciones.html">Evaluaciones</a></li>
-                    </ul>
-                    <div class="d-flex align-items-center">
-                        <span id="user-name" class="me-2 fw-bold">Usuario</span>
-                        <div class="rounded-circle bg-secondary d-flex justify-content-center align-items-center" style="width: 40px; height: 40px;">
-                            <i class="bi bi-person text-white"></i>
+
+<body>
+    <!-- Navegación de cajón -->
+    <aside class="md-drawer" id="main-drawer">
+        <div class="md-drawer__header">
+            <div class="md-drawer__title">Estudio Colectivo UNAL</div>
+        </div>
+        <div class="md-drawer__content">
+            <ul class="md-nav-list">
+                <li class="md-nav-list__item">
+                    <a href="dashboard.html" class="md-nav-list__link">
+                        <span class="material-icons md-nav-list__icon">dashboard</span>
+                        <span class="md-nav-list__text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="md-nav-list__item md-nav-list__item--active">
+                    <a href="grupos.html" class="md-nav-list__link">
+                        <span class="material-icons md-nav-list__icon">groups</span>
+                        <span class="md-nav-list__text">Grupos</span>
+                    </a>
+                </li>
+                <li class="md-nav-list__item">
+                    <a href="tareas.html" class="md-nav-list__link">
+                        <span class="material-icons md-nav-list__icon">assignment</span>
+                        <span class="md-nav-list__text">Tareas</span>
+                    </a>
+                </li>
+                <li class="md-nav-list__item">
+                    <a href="calendario.html" class="md-nav-list__link">
+                        <span class="material-icons md-nav-list__icon">calendar_month</span>
+                        <span class="md-nav-list__text">Calendario</span>
+                    </a>
+                </li>
+                <li class="md-nav-list__item">
+                    <a href="resumenes.html" class="md-nav-list__link">
+                        <span class="material-icons md-nav-list__icon">summarize</span>
+                        <span class="md-nav-list__text">Resúmenes</span>
+                    </a>
+                </li>
+                <li class="md-nav-list__item">
+                    <a href="chat.html" class="md-nav-list__link">
+                        <span class="material-icons md-nav-list__icon">chat</span>
+                        <span class="md-nav-list__text">Chat</span>
+                    </a>
+                </li>
+                <li class="md-nav-list__item">
+                    <a href="evaluaciones.html" class="md-nav-list__link">
+                        <span class="material-icons md-nav-list__icon">grade</span>
+                        <span class="md-nav-list__text">Evaluaciones</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </aside>
+
+    <!-- Overlay para cajón de navegación -->
+    <div class="md-drawer__overlay" id="drawer-overlay"></div>
+
+    <!-- Barra superior -->
+    <header class="md-top-app-bar">
+        <div class="md-top-app-bar__row">
+            <section class="md-top-app-bar__section">
+                <span id="menu-button" class="material-icons md-top-app-bar__nav-icon">menu</span>
+                <span class="md-top-app-bar__title">Gestión de Grupos</span>
+            </section>
+            <section class="md-top-app-bar__section md-top-app-bar__section--align-end">
+                <span class="material-icons md-top-app-bar__action-item">notifications</span>
+                <span class="material-icons md-top-app-bar__action-item">search</span>
+                <div class="md-top-app-bar__action-item user-avatar">AS</div>
+            </section>
+        </div>
+    </header>
+
+    <!-- Contenido principal -->
+    <main class="container">
+        <div class="groups-content">
+            <!-- Barra de búsqueda y filtros -->
+            <div class="search-bar">
+                <span class="material-icons search-bar__icon">search</span>
+                <input type="text" class="search-bar__input" placeholder="Buscar grupos...">
+                <div class="search-bar__actions">
+                    <button class="md-button md-button--icon">
+                        <span class="material-icons">filter_list</span>
+                    </button>
+                    <button class="md-button md-button--icon">
+                        <span class="material-icons">tune</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Filtros -->
+            <div class="filter-section">
+                <div class="md-filter-chip md-filter-chip--selected">
+                    <span class="md-filter-chip__icon material-icons">groups</span>
+                    Todos
+                </div>
+                <div class="md-filter-chip">
+                    <span class="md-filter-chip__icon material-icons">favorite</span>
+                    Mis grupos
+                </div>
+                <div class="md-filter-chip">
+                    <span class="md-filter-chip__icon material-icons">star</span>
+                    Destacados
+                </div>
+                <div class="md-filter-chip">
+                    <span class="md-filter-chip__icon material-icons">school</span>
+                    Matemáticas
+                </div>
+                <div class="md-filter-chip">
+                    <span class="md-filter-chip__icon material-icons">science</span>
+                    Física
+                </div>
+                <div class="md-filter-chip">
+                    <span class="md-filter-chip__icon material-icons">history_edu</span>
+                    Historia
+                </div>
+            </div>
+
+            <!-- Grupos -->
+            <div class="md-layout-grid">
+                <!-- Tarjeta para crear nuevo grupo -->
+                <div
+                    class="md-layout-grid__cell md-layout-grid__cell--span-4-desktop md-layout-grid__cell--span-4-tablet animate-fadeIn">
+                    <div class="md-card create-group-card" id="create-group-button">
+                        <div class="create-group-card__icon">
+                            <span class="material-icons">add</span>
+                        </div>
+                        <div class="create-group-card__text">Crear nuevo grupo de estudio</div>
+                    </div>
+                </div>
+
+                <!-- Grupo de Matemáticas -->
+                <div
+                    class="md-layout-grid__cell md-layout-grid__cell--span-4-desktop md-layout-grid__cell--span-4-tablet animate-fadeIn animate-delay-1">
+                    <div class="md-card group-card">
+                        <div class="group-card__header">
+                            <div class="group-card__icon">
+                                <span class="material-icons">calculate</span>
+                            </div>
+                            <div>
+                                <h3 class="group-card__title">Grupo de Matemáticas</h3>
+                                <div class="group-card__subtitle">Estudio avanzado de álgebra y cálculo</div>
+                            </div>
+                        </div>
+                        <div class="group-card__content">
+                            <div class="group-card__stats">
+                                <div class="group-card__stat">
+                                    <div class="group-card__stat-value">5</div>
+                                    <div class="group-card__stat-label">Miembros</div>
+                                </div>
+                                <div class="group-card__stat">
+                                    <div class="group-card__stat-value">85%</div>
+                                    <div class="group-card__stat-label">Compatibilidad</div>
+                                </div>
+                                <div class="group-card__stat">
+                                    <div class="group-card__stat-value">8</div>
+                                    <div class="group-card__stat-label">Sesiones</div>
+                                </div>
+                            </div>
+                            <div>
+                                <span class="group-card__tag">Álgebra</span>
+                                <span class="group-card__tag">Cálculo</span>
+                            </div>
+                            <div class="md-body-small">
+                                <span class="material-icons"
+                                    style="font-size: 16px; vertical-align: middle;">schedule</span>
+                                Lunes y Miércoles 10:00 AM
+                            </div>
+                            <div class="user-avatar-list">
+                                <div class="user-avatar-list__item">JG</div>
+                                <div class="user-avatar-list__item">MC</div>
+                                <div class="user-avatar-list__item">AL</div>
+                                <div class="user-avatar-list__more">+2</div>
+                            </div>
+                        </div>
+                        <div class="group-card__actions">
+                            <button class="md-button md-button--outlined">
+                                <span class="material-icons">info</span>
+                                Detalles
+                            </button>
+                            <button class="md-button md-button--filled">
+                                <span class="material-icons">login</span>
+                                Unirse
+                            </button>
                         </div>
                     </div>
                 </div>
-            </div>
-        </nav>
 
-        <!-- Contenido principal -->
-        <div class="row">
-            <!-- Sección para crear un nuevo grupo -->
-            <div class="col-md-6">
-                <div class="card mb-4 shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">Crear Nuevo Grupo</h5>
-                        <form id="crear-grupo-form">
-                            <div class="mb-3">
-                                <input type="text" id="nombre-grupo" class="form-control" placeholder="Nombre del grupo" required>
+                <!-- Grupo de Física -->
+                <div
+                    class="md-layout-grid__cell md-layout-grid__cell--span-4-desktop md-layout-grid__cell--span-4-tablet animate-fadeIn animate-delay-2">
+                    <div class="md-card group-card">
+                        <div class="group-card__header">
+                            <div class="group-card__icon">
+                                <span class="material-icons">science</span>
                             </div>
-                            <div class="mb-3">
-                                <textarea id="descripcion-grupo" class="form-control" placeholder="Descripción del grupo" required></textarea>
+                            <div>
+                                <h3 class="group-card__title">Grupo de Física</h3>
+                                <div class="group-card__subtitle">Mecánica y termodinámica</div>
                             </div>
-                            <div class="mb-3">
-                                <input type="text" id="horario-grupo" class="form-control" placeholder="Horario (ej: Lunes 10:00 AM)" required>
+                        </div>
+                        <div class="group-card__content">
+                            <div class="group-card__stats">
+                                <div class="group-card__stat">
+                                    <div class="group-card__stat-value">3</div>
+                                    <div class="group-card__stat-label">Miembros</div>
+                                </div>
+                                <div class="group-card__stat">
+                                    <div class="group-card__stat-value">75%</div>
+                                    <div class="group-card__stat-label">Compatibilidad</div>
+                                </div>
+                                <div class="group-card__stat">
+                                    <div class="group-card__stat-value">5</div>
+                                    <div class="group-card__stat-label">Sesiones</div>
+                                </div>
                             </div>
-                            <button type="submit" class="btn btn-primary">Crear Grupo</button>
-                        </form>
+                            <div>
+                                <span class="group-card__tag">Mecánica</span>
+                                <span class="group-card__tag">Termodinámica</span>
+                            </div>
+                            <div class="md-body-small">
+                                <span class="material-icons"
+                                    style="font-size: 16px; vertical-align: middle;">schedule</span>
+                                Martes y Jueves 2:00 PM
+                            </div>
+                            <div class="user-avatar-list">
+                                <div class="user-avatar-list__item">CL</div>
+                                <div class="user-avatar-list__item">MR</div>
+                                <div class="user-avatar-list__item">AT</div>
+                            </div>
+                        </div>
+                        <div class="group-card__actions">
+                            <button class="md-button md-button--outlined">
+                                <span class="material-icons">info</span>
+                                Detalles
+                            </button>
+                            <button class="md-button md-button--filled">
+                                <span class="material-icons">login</span>
+                                Unirse
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Sección para unirse a un grupo existente -->
-            <div class="col-md-6">
-                <div class="card mb-4 shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">Unirse a un Grupo Existente</h5>
-                        <!-- Buscador de grupos (solo estético) -->
-                        <div class="mb-3">
-                            <input type="text" id="buscar-grupo" class="form-control" placeholder="Buscar grupo...">
+                <!-- Grupo de Historia -->
+                <div
+                    class="md-layout-grid__cell md-layout-grid__cell--span-4-desktop md-layout-grid__cell--span-4-tablet animate-fadeIn animate-delay-3">
+                    <div class="md-card group-card">
+                        <div class="group-card__header">
+                            <div class="group-card__icon">
+                                <span class="material-icons">history_edu</span>
+                            </div>
+                            <div>
+                                <h3 class="group-card__title">Grupo de Historia</h3>
+                                <div class="group-card__subtitle">Análisis de eventos históricos</div>
+                            </div>
                         </div>
-                        <!-- Lista de grupos con scroll -->
-                        <div id="lista-grupos" class="list-group scrollable-list">
-                            <div class="list-group-item">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <h6>Grupo de Matemáticas</h6>
-                                        <p><strong>Descripción:</strong> Estudio avanzado de álgebra y cálculo.</p>
-                                        <p><strong>Horario:</strong> Lunes y Miércoles 10:00 AM</p>
-                                        <p><strong>Miembros:</strong> 5</p>
-                                        <p><strong>Compatibilidad:</strong> 85%</p>
-                                    </div>
-                                    <button class="btn btn-primary btn-sm" onclick="alert('Has solicitado acceso al grupo: Grupo de Matemáticas')">Solicitar Acceso</button>
+                        <div class="group-card__content">
+                            <div class="group-card__stats">
+                                <div class="group-card__stat">
+                                    <div class="group-card__stat-value">4</div>
+                                    <div class="group-card__stat-label">Miembros</div>
+                                </div>
+                                <div class="group-card__stat">
+                                    <div class="group-card__stat-value">90%</div>
+                                    <div class="group-card__stat-label">Compatibilidad</div>
+                                </div>
+                                <div class="group-card__stat">
+                                    <div class="group-card__stat-value">6</div>
+                                    <div class="group-card__stat-label">Sesiones</div>
                                 </div>
                             </div>
-                            <div class="list-group-item">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <h6>Grupo de Física</h6>
-                                        <p><strong>Descripción:</strong> Discusión de temas de mecánica y termodinámica.</p>
-                                        <p><strong>Horario:</strong> Martes y Jueves 2:00 PM</p>
-                                        <p><strong>Miembros:</strong> 3</p>
-                                        <p><strong>Compatibilidad:</strong> 75%</p>
-                                    </div>
-                                    <button class="btn btn-primary btn-sm" onclick="alert('Has solicitado acceso al grupo: Grupo de Física')">Solicitar Acceso</button>
+                            <div>
+                                <span class="group-card__tag">Contemporánea</span>
+                                <span class="group-card__tag">Cultura</span>
+                            </div>
+                            <div class="md-body-small">
+                                <span class="material-icons"
+                                    style="font-size: 16px; vertical-align: middle;">schedule</span>
+                                Viernes 4:00 PM
+                            </div>
+                            <div class="user-avatar-list">
+                                <div class="user-avatar-list__item">PG</div>
+                                <div class="user-avatar-list__item">LF</div>
+                                <div class="user-avatar-list__item">RM</div>
+                                <div class="user-avatar-list__item">JP</div>
+                            </div>
+                        </div>
+                        <div class="group-card__actions">
+                            <button class="md-button md-button--outlined">
+                                <span class="material-icons">info</span>
+                                Detalles
+                            </button>
+                            <button class="md-button md-button--filled">
+                                <span class="material-icons">login</span>
+                                Unirse
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Grupo de Literatura -->
+                <div
+                    class="md-layout-grid__cell md-layout-grid__cell--span-4-desktop md-layout-grid__cell--span-4-tablet animate-fadeIn">
+                    <div class="md-card group-card">
+                        <div class="group-card__header">
+                            <div class="group-card__icon">
+                                <span class="material-icons">auto_stories</span>
+                            </div>
+                            <div>
+                                <h3 class="group-card__title">Grupo de Literatura</h3>
+                                <div class="group-card__subtitle">Análisis de obras literarias</div>
+                            </div>
+                        </div>
+                        <div class="group-card__content">
+                            <div class="group-card__stats">
+                                <div class="group-card__stat">
+                                    <div class="group-card__stat-value">6</div>
+                                    <div class="group-card__stat-label">Miembros</div>
+                                </div>
+                                <div class="group-card__stat">
+                                    <div class="group-card__stat-value">80%</div>
+                                    <div class="group-card__stat-label">Compatibilidad</div>
+                                </div>
+                                <div class="group-card__stat">
+                                    <div class="group-card__stat-value">4</div>
+                                    <div class="group-card__stat-label">Sesiones</div>
                                 </div>
                             </div>
-                            <div class="list-group-item">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <h6>Grupo de Historia</h6>
-                                        <p><strong>Descripción:</strong> Análisis de eventos históricos y su impacto.</p>
-                                        <p><strong>Horario:</strong> Viernes 4:00 PM</p>
-                                        <p><strong>Miembros:</strong> 4</p>
-                                        <p><strong>Compatibilidad:</strong> 90%</p>
-                                    </div>
-                                    <button class="btn btn-primary btn-sm" onclick="alert('Has solicitado acceso al grupo: Grupo de Historia')">Solicitar Acceso</button>
+                            <div>
+                                <span class="group-card__tag">Clásicos</span>
+                                <span class="group-card__tag">Modernismo</span>
+                            </div>
+                            <div class="md-body-small">
+                                <span class="material-icons"
+                                    style="font-size: 16px; vertical-align: middle;">schedule</span>
+                                Miércoles 6:00 PM
+                            </div>
+                            <div class="user-avatar-list">
+                                <div class="user-avatar-list__item">MG</div>
+                                <div class="user-avatar-list__item">JR</div>
+                                <div class="user-avatar-list__item">LV</div>
+                                <div class="user-avatar-list__more">+3</div>
+                            </div>
+                        </div>
+                        <div class="group-card__actions">
+                            <button class="md-button md-button--outlined">
+                                <span class="material-icons">info</span>
+                                Detalles
+                            </button>
+                            <button class="md-button md-button--filled">
+                                <span class="material-icons">login</span>
+                                Unirse
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Grupo de Programación -->
+                <div
+                    class="md-layout-grid__cell md-layout-grid__cell--span-4-desktop md-layout-grid__cell--span-4-tablet animate-fadeIn animate-delay-1">
+                    <div class="md-card group-card">
+                        <div class="group-card__header">
+                            <div class="group-card__icon">
+                                <span class="material-icons">code</span>
+                            </div>
+                            <div>
+                                <h3 class="group-card__title">Grupo de Programación</h3>
+                                <div class="group-card__subtitle">Resolución de problemas coding</div>
+                            </div>
+                        </div>
+                        <div class="group-card__content">
+                            <div class="group-card__stats">
+                                <div class="group-card__stat">
+                                    <div class="group-card__stat-value">7</div>
+                                    <div class="group-card__stat-label">Miembros</div>
+                                </div>
+                                <div class="group-card__stat">
+                                    <div class="group-card__stat-value">95%</div>
+                                    <div class="group-card__stat-label">Compatibilidad</div>
+                                </div>
+                                <div class="group-card__stat">
+                                    <div class="group-card__stat-value">12</div>
+                                    <div class="group-card__stat-label">Sesiones</div>
                                 </div>
                             </div>
-                            <!-- Más grupos de ejemplo -->
-                            <div class="list-group-item">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <h6>Grupo de Literatura</h6>
-                                        <p><strong>Descripción:</strong> Análisis de obras literarias clásicas.</p>
-                                        <p><strong>Horario:</strong> Miércoles 6:00 PM</p>
-                                        <p><strong>Miembros:</strong> 6</p>
-                                        <p><strong>Compatibilidad:</strong> 80%</p>
-                                    </div>
-                                    <button class="btn btn-primary btn-sm" onclick="alert('Has solicitado acceso al grupo: Grupo de Literatura')">Solicitar Acceso</button>
-                                </div>
+                            <div>
+                                <span class="group-card__tag">Python</span>
+                                <span class="group-card__tag">JavaScript</span>
+                                <span class="group-card__tag">Algoritmos</span>
                             </div>
-                            <div class="list-group-item">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <h6>Grupo de Programación</h6>
-                                        <p><strong>Descripción:</strong> Resolución de problemas de programación.</p>
-                                        <p><strong>Horario:</strong> Jueves 3:00 PM</p>
-                                        <p><strong>Miembros:</strong> 7</p>
-                                        <p><strong>Compatibilidad:</strong> 95%</p>
-                                    </div>
-                                    <button class="btn btn-primary btn-sm" onclick="alert('Has solicitado acceso al grupo: Grupo de Programación')">Solicitar Acceso</button>
-                                </div>
+                            <div class="md-body-small">
+                                <span class="material-icons"
+                                    style="font-size: 16px; vertical-align: middle;">schedule</span>
+                                Jueves 3:00 PM
                             </div>
+                            <div class="user-avatar-list">
+                                <div class="user-avatar-list__item">AR</div>
+                                <div class="user-avatar-list__item">JM</div>
+                                <div class="user-avatar-list__item">DL</div>
+                                <div class="user-avatar-list__more">+4</div>
+                            </div>
+                        </div>
+                        <div class="group-card__actions">
+                            <button class="md-button md-button--outlined">
+                                <span class="material-icons">info</span>
+                                Detalles
+                            </button>
+                            <button class="md-button md-button--filled">
+                                <span class="material-icons">login</span>
+                                Unirse
+                            </button>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+    </main>
 
-        <!-- Sección para invitar usuarios al grupo -->
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card mb-4 shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">Invitar Usuarios al Grupo</h5>
-                        
-                        <!-- Selector de grupos -->
-                        <div class="mb-3">
-                            <label for="select-grupo" class="form-label">Seleccionar Grupo</label>
-                            <select id="select-grupo" class="form-select">
-                                <option value="Grupo de Matemáticas">Grupo de Matemáticas</option>
-                                <option value="Grupo de Física">Grupo de Física</option>
-                                <option value="Grupo de Historia">Grupo de Historia</option>
-                                <option value="Grupo de Literatura">Grupo de Literatura</option>
-                                <option value="Grupo de Programación">Grupo de Programación</option>
-                            </select>
-                        </div>
+    <!-- Botón de acción flotante -->
+    <button class="md-fab" id="fab-add-group">
+        <span class="material-icons">add</span>
+    </button>
 
-                        <!-- Buscador de usuarios (solo estético) -->
-                        <div class="mb-3">
-                            <input type="text" id="buscar-usuario" class="form-control" placeholder="Buscar usuario...">
-                        </div>
-
-                        <!-- Lista de usuarios con scroll -->
-                        <div id="lista-usuarios" class="list-group scrollable-list">
-                            <div class="list-group-item">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <h6>Juan Pérez</h6>
-                                        <p><strong>Actividades:</strong> 15</p>
-                                        <p><strong>Logros:</strong> Mejor estudiante de Matemáticas, Participación destacada en Física</p>
-                                        <p><strong>Participación:</strong> 80%</p>
-                                        <p><strong>Compatibilidad:</strong> 85%</p>
-                                    </div>
-                                    <button class="btn btn-primary btn-sm" onclick="invitarUsuario('Juan Pérez')">Invitar</button>
-                                </div>
-                            </div>
-                            <div class="list-group-item">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <h6>María Gómez</h6>
-                                        <p><strong>Actividades:</strong> 10</p>
-                                        <p><strong>Logros:</strong> Líder del grupo de Historia, Participación activa en Chat</p>
-                                        <p><strong>Participación:</strong> 90%</p>
-                                        <p><strong>Compatibilidad:</strong> 90%</p>
-                                    </div>
-                                    <button class="btn btn-primary btn-sm" onclick="invitarUsuario('María Gómez')">Invitar</button>
-                                </div>
-                            </div>
-                            <div class="list-group-item">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <h6>Carlos López</h6>
-                                        <p><strong>Actividades:</strong> 5</p>
-                                        <p><strong>Logros:</strong> Colaborador en Tareas, Asistencia perfecta</p>
-                                        <p><strong>Participación:</strong> 70%</p>
-                                        <p><strong>Compatibilidad:</strong> 75%</p>
-                                    </div>
-                                    <button class="btn btn-primary btn-sm" onclick="invitarUsuario('Carlos López')">Invitar</button>
-                                </div>
-                            </div>
-                            <!-- Más usuarios de ejemplo -->
-                            <div class="list-group-item">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <h6>Ana Torres</h6>
-                                        <p><strong>Actividades:</strong> 12</p>
-                                        <p><strong>Logros:</strong> Mejor presentación de Física, Participación destacada en Chat</p>
-                                        <p><strong>Participación:</strong> 85%</p>
-                                        <p><strong>Compatibilidad:</strong> 88%</p>
-                                    </div>
-                                    <button class="btn btn-primary btn-sm" onclick="invitarUsuario('Ana Torres')">Invitar</button>
-                                </div>
-                            </div>
-                            <div class="list-group-item">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <h6>Luis Ramírez</h6>
-                                        <p><strong>Actividades:</strong> 8</p>
-                                        <p><strong>Logros:</strong> Colaborador en Tareas, Asistencia perfecta</p>
-                                        <p><strong>Participación:</strong> 75%</p>
-                                        <p><strong>Compatibilidad:</strong> 80%</p>
-                                    </div>
-                                    <button class="btn btn-primary btn-sm" onclick="invitarUsuario('Luis Ramírez')">Invitar</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Script para manejar la invitación -->
+    <!-- Scripts -->
     <script>
-        function invitarUsuario(nombreUsuario) {
-            const grupoSeleccionado = document.getElementById('select-grupo').value;
-            alert(`Invitación enviada a ${nombreUsuario} para unirse al grupo: ${grupoSeleccionado}`);
-        }
+        /**
+ * Script para la página de Gestión de Grupos
+ * Implementa funcionalidades de Material Design 3
+ */
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // ======= NAVEGACIÓN Y UI GENERAL =======
+
+            // Navegación de cajón
+            const drawer = document.getElementById('main-drawer');
+            const drawerOverlay = document.getElementById('drawer-overlay');
+            const menuButton = document.getElementById('menu-button');
+
+            function toggleDrawer() {
+                drawer.classList.toggle('md-drawer--open');
+                drawerOverlay.classList.toggle('md-drawer__overlay--open');
+            }
+
+            menuButton.addEventListener('click', toggleDrawer);
+            drawerOverlay.addEventListener('click', toggleDrawer);
+
+            // Marcar el enlace activo en la navegación
+            function setupActiveNavLink() {
+                const currentPage = window.location.pathname.split('/').pop() || 'index.html';
+
+                const navLinks = document.querySelectorAll('.md-nav-list__link');
+                navLinks.forEach(link => {
+                    const linkPage = link.getAttribute('href');
+                    const parentItem = link.parentElement;
+
+                    if ((currentPage === 'index.html' && linkPage === 'dashboard.html') ||
+                        linkPage === currentPage) {
+                        document.querySelectorAll('.md-nav-list__item').forEach(item => {
+                            item.classList.remove('md-nav-list__item--active');
+                        });
+                        parentItem.classList.add('md-nav-list__item--active');
+                    }
+                });
+            }
+
+            setupActiveNavLink();
+
+            // ======= FILTROS DE GRUPOS =======
+
+            // Manejar chips de filtrado
+            const filterChips = document.querySelectorAll('.md-filter-chip');
+
+            filterChips.forEach(chip => {
+                chip.addEventListener('click', function () {
+                    // Para filtro único: Desactivar todos los demás
+                    if (this.classList.contains('md-filter-chip--single-select')) {
+                        filterChips.forEach(c => c.classList.remove('md-filter-chip--selected'));
+                    }
+
+                    // Toggle la selección actual
+                    this.classList.toggle('md-filter-chip--selected');
+
+                    // Aplicar filtros a la lista de grupos
+                    applyFilters();
+                });
+            });
+
+            function applyFilters() {
+                const activeFilters = Array.from(document.querySelectorAll('.md-filter-chip--selected'))
+                    .map(chip => chip.textContent.trim().toLowerCase());
+
+                const groupCards = document.querySelectorAll('.group-card');
+
+                // Si no hay filtros activos, mostrar todos
+                if (activeFilters.length === 0 || activeFilters.includes('todos')) {
+                    groupCards.forEach(card => {
+                        card.parentElement.style.display = 'block';
+                    });
+                    return;
+                }
+
+                // Filtrar basado en las etiquetas de cada grupo
+                groupCards.forEach(card => {
+                    const tags = Array.from(card.querySelectorAll('.group-card__tag'))
+                        .map(tag => tag.textContent.trim().toLowerCase());
+
+                    const title = card.querySelector('.group-card__title')
+                        .textContent.trim().toLowerCase();
+
+                    // Verificar si el grupo coincide con algún filtro activo
+                    const matchesFilter = activeFilters.some(filter => {
+                        return tags.includes(filter) ||
+                            title.includes(filter) ||
+                            (filter === 'mis grupos' && card.classList.contains('my-group'));
+                    });
+
+                    // Mostrar u ocultar según coincidencia
+                    card.parentElement.style.display = matchesFilter ? 'block' : 'none';
+                });
+            }
+
+            // Barra de búsqueda
+            const searchInput = document.querySelector('.search-bar__input');
+
+            searchInput.addEventListener('input', function () {
+                const searchTerm = this.value.trim().toLowerCase();
+
+                if (searchTerm === '') {
+                    // Si no hay término de búsqueda, solo aplicar filtros actuales
+                    applyFilters();
+                    return;
+                }
+
+                const groupCards = document.querySelectorAll('.group-card');
+
+                groupCards.forEach(card => {
+                    const title = card.querySelector('.group-card__title')
+                        .textContent.trim().toLowerCase();
+
+                    const description = card.querySelector('.group-card__subtitle')
+                        .textContent.trim().toLowerCase();
+
+                    const tags = Array.from(card.querySelectorAll('.group-card__tag'))
+                        .map(tag => tag.textContent.trim().toLowerCase());
+
+                    // Buscar coincidencia en título, descripción o etiquetas
+                    const matchesSearch =
+                        title.includes(searchTerm) ||
+                        description.includes(searchTerm) ||
+                        tags.some(tag => tag.includes(searchTerm));
+
+                    // Mostrar u ocultar según coincidencia
+                    card.parentElement.style.display = matchesSearch ? 'block' : 'none';
+                });
+            });
+
+            // Limpiar búsqueda cuando se hace clic en el botón de borrar
+            const clearSearchButton = document.querySelector('.search-bar__clear');
+            if (clearSearchButton) {
+                clearSearchButton.addEventListener('click', function () {
+                    searchInput.value = '';
+                    searchInput.focus();
+                    applyFilters();
+                });
+            }
+
+            // ======= CREACIÓN DE GRUPOS =======
+
+            // Botones para crear grupo (tanto el FAB como la tarjeta de crear grupo)
+            const createGroupButtons = [
+                document.getElementById('create-group-button'),
+                document.getElementById('fab-add-group')
+            ];
+
+            createGroupButtons.forEach(button => {
+                if (button) {
+                    button.addEventListener('click', showCreateGroupDialog);
+                }
+            });
+
+            // Función para mostrar el diálogo de creación de grupo
+            function showCreateGroupDialog() {
+                // Crear contenedor del diálogo
+                const dialogContainer = document.createElement('div');
+                dialogContainer.className = 'md-dialog-container';
+
+                // Crear overlay
+                const overlay = document.createElement('div');
+                overlay.className = 'md-dialog-overlay';
+                dialogContainer.appendChild(overlay);
+
+                // Crear diálogo
+                const dialog = document.createElement('div');
+                dialog.className = 'md-dialog';
+
+                // Cabecera del diálogo
+                const header = document.createElement('div');
+                header.className = 'md-dialog__header';
+
+                const title = document.createElement('h2');
+                title.className = 'md-dialog__title';
+                title.textContent = 'Crear Nuevo Grupo';
+
+                header.appendChild(title);
+                dialog.appendChild(header);
+
+                // Contenido del diálogo
+                const content = document.createElement('div');
+                content.className = 'md-dialog__content';
+
+                content.innerHTML = `
+            <form class="group-form">
+                <div class="group-form__section">
+                    <div class="md-text-field">
+                        <input type="text" id="group-name" class="md-text-field__input" placeholder=" " required>
+                        <label for="group-name" class="md-text-field__label">Nombre del grupo</label>
+                    </div>
+                    
+                    <div class="md-text-field">
+                        <textarea id="group-description" class="md-text-field__input" placeholder=" " rows="3" required></textarea>
+                        <label for="group-description" class="md-text-field__label">Descripción</label>
+                    </div>
+                </div>
+                
+                <div class="group-form__section">
+                    <div class="group-form__section-title">Área de estudio</div>
+                    
+                    <div class="md-text-field">
+                        <input type="text" id="group-subject" class="md-text-field__input" placeholder=" " required>
+                        <label for="group-subject" class="md-text-field__label">Materia principal</label>
+                    </div>
+                    
+                    <div class="md-text-field">
+                        <input type="text" id="group-tags" class="md-text-field__input" placeholder=" ">
+                        <label for="group-tags" class="md-text-field__label">Etiquetas (separadas por comas)</label>
+                        <div class="md-text-field__helper-text">Ejemplo: Cálculo, Álgebra, Matemáticas</div>
+                    </div>
+                </div>
+                
+                <div class="group-form__section">
+                    <div class="group-form__section-title">Horario</div>
+                    
+                    <div class="md-layout-grid">
+                        <div class="md-layout-grid__cell md-layout-grid__cell--span-6">
+                            <div class="md-text-field">
+                                <input type="text" id="group-schedule-days" class="md-text-field__input" placeholder=" " required>
+                                <label for="group-schedule-days" class="md-text-field__label">Días</label>
+                                <div class="md-text-field__helper-text">Ejemplo: Lunes y Miércoles</div>
+                            </div>
+                        </div>
+                        
+                        <div class="md-layout-grid__cell md-layout-grid__cell--span-6">
+                            <div class="md-text-field">
+                                <input type="text" id="group-schedule-time" class="md-text-field__input" placeholder=" " required>
+                                <label for="group-schedule-time" class="md-text-field__label">Hora</label>
+                                <div class="md-text-field__helper-text">Ejemplo: 10:00 AM</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        `;
+
+                dialog.appendChild(content);
+
+                // Acciones del diálogo
+                const actions = document.createElement('div');
+                actions.className = 'md-dialog__actions';
+
+                const cancelButton = document.createElement('button');
+                cancelButton.className = 'md-button md-button--text';
+                cancelButton.textContent = 'Cancelar';
+                cancelButton.addEventListener('click', () => {
+                    closeDialog(dialogContainer);
+                });
+
+                const createButton = document.createElement('button');
+                createButton.className = 'md-button md-button--filled';
+                createButton.textContent = 'Crear';
+                createButton.addEventListener('click', () => {
+                    handleCreateGroup(dialogContainer);
+                });
+
+                actions.appendChild(cancelButton);
+                actions.appendChild(createButton);
+                dialog.appendChild(actions);
+
+                dialogContainer.appendChild(dialog);
+                document.body.appendChild(dialogContainer);
+
+                // Mostrar el diálogo
+                setTimeout(() => {
+                    dialogContainer.classList.add('md-dialog-container--open');
+                }, 10);
+            }
+
+            // Cerrar diálogo
+            function closeDialog(dialogContainer) {
+                dialogContainer.classList.remove('md-dialog-container--open');
+                setTimeout(() => {
+                    dialogContainer.remove();
+                }, 300);
+            }
+
+            // Manejar creación de grupo
+            function handleCreateGroup(dialogContainer) {
+                const groupName = document.getElementById('group-name').value.trim();
+                const groupDescription = document.getElementById('group-description').value.trim();
+                const groupSubject = document.getElementById('group-subject').value.trim();
+                const groupTags = document.getElementById('group-tags').value.trim();
+                const scheduleDays = document.getElementById('group-schedule-days').value.trim();
+                const scheduleTime = document.getElementById('group-schedule-time').value.trim();
+
+                // Validación simple
+                if (!groupName || !groupDescription || !groupSubject || !scheduleDays || !scheduleTime) {
+                    showSnackbar('Por favor, completa todos los campos requeridos');
+                    return;
+                }
+
+                // En una implementación real, enviaríamos los datos al servidor aquí
+                // Por ahora, solo simulamos la creación con un mensaje de éxito
+                closeDialog(dialogContainer);
+
+                showSnackbar('Grupo creado correctamente', {
+                    text: 'Ver grupo',
+                    handler: () => {
+                        // Simular redirección a detalles del grupo
+                        console.log('Redirigiendo a detalles del grupo...');
+                    }
+                });
+            }
+
+            // ======= INTERACCIONES DE GRUPO =======
+
+            // Botones para unirse a grupos
+            const joinButtons = document.querySelectorAll('.group-card .md-button--filled');
+
+            joinButtons.forEach(button => {
+                button.addEventListener('click', function (event) {
+                    event.preventDefault();
+
+                    const groupCard = this.closest('.group-card');
+                    const groupName = groupCard.querySelector('.group-card__title').textContent;
+
+                    // Simular unirse a un grupo
+                    showSnackbar(`Te has unido al grupo: ${groupName}`, {
+                        text: 'Ver detalles',
+                        handler: () => {
+                            console.log(`Mostrando detalles de ${groupName}`);
+                        }
+                    });
+
+                    // Cambiar el botón a "Ya eres miembro"
+                    this.textContent = 'Miembro';
+                    this.disabled = true;
+                    this.classList.add('md-button--disabled');
+                });
+            });
+
+            // Botones de detalles
+            const detailButtons = document.querySelectorAll('.group-card .md-button--outlined');
+
+            detailButtons.forEach(button => {
+                button.addEventListener('click', function (event) {
+                    event.preventDefault();
+
+                    const groupCard = this.closest('.group-card');
+                    const groupName = groupCard.querySelector('.group-card__title').textContent;
+
+                    // Mostrar detalles del grupo en un diálogo
+                    showGroupDetailsDialog(groupName);
+                });
+            });
+
+            // Mostrar diálogo de detalles del grupo
+            function showGroupDetailsDialog(groupName) {
+                // Simulamos datos del grupo
+                const groupDetails = {
+                    name: groupName,
+                    description: 'Este grupo se enfoca en el estudio colaborativo y la resolución de problemas relacionados con la materia.',
+                    schedule: 'Lunes y Miércoles, 10:00 AM',
+                    members: ['Juan García', 'María Castillo', 'Ana López', 'Luis Ramírez', 'Carlos Pérez'],
+                    location: 'Biblioteca Central, Sala de Estudio 3',
+                    nextMeeting: '28 de Febrero, 2025 - 10:00 AM'
+                };
+
+                // Crear diálogo
+                const dialogContainer = document.createElement('div');
+                dialogContainer.className = 'md-dialog-container';
+
+                const overlay = document.createElement('div');
+                overlay.className = 'md-dialog-overlay';
+                dialogContainer.appendChild(overlay);
+
+                const dialog = document.createElement('div');
+                dialog.className = 'md-dialog';
+
+                // Cabecera
+                const header = document.createElement('div');
+                header.className = 'md-dialog__header';
+
+                const title = document.createElement('h2');
+                title.className = 'md-dialog__title';
+                title.textContent = groupDetails.name;
+
+                header.appendChild(title);
+                dialog.appendChild(header);
+
+                // Contenido
+                const content = document.createElement('div');
+                content.className = 'md-dialog__content';
+
+                content.innerHTML = `
+            <p><strong>Descripción:</strong> ${groupDetails.description}</p>
+            <p><strong>Horario:</strong> ${groupDetails.schedule}</p>
+            <p><strong>Ubicación:</strong> ${groupDetails.location}</p>
+            <p><strong>Próxima reunión:</strong> ${groupDetails.nextMeeting}</p>
+            
+            <h3 class="md-title-small mt-4">Miembros (${groupDetails.members.length})</h3>
+            <ul class="md-list">
+                ${groupDetails.members.map(member => `
+                    <li class="md-list__item">
+                        <span class="material-icons md-list__icon">person</span>
+                        <span class="md-list__text">${member}</span>
+                    </li>
+                `).join('')}
+            </ul>
+        `;
+
+                dialog.appendChild(content);
+
+                // Acciones
+                const actions = document.createElement('div');
+                actions.className = 'md-dialog__actions';
+
+                const closeButton = document.createElement('button');
+                closeButton.className = 'md-button md-button--text';
+                closeButton.textContent = 'Cerrar';
+                closeButton.addEventListener('click', () => {
+                    closeDialog(dialogContainer);
+                });
+
+                const joinButton = document.createElement('button');
+                joinButton.className = 'md-button md-button--filled';
+                joinButton.textContent = 'Unirse al grupo';
+                joinButton.addEventListener('click', () => {
+                    closeDialog(dialogContainer);
+                    showSnackbar(`Te has unido al grupo: ${groupDetails.name}`);
+                });
+
+                actions.appendChild(closeButton);
+                actions.appendChild(joinButton);
+                dialog.appendChild(actions);
+
+                dialogContainer.appendChild(dialog);
+                document.body.appendChild(dialogContainer);
+
+                setTimeout(() => {
+                    dialogContainer.classList.add('md-dialog-container--open');
+                }, 10);
+            }
+
+            // ======= UTILIDADES =======
+
+            // Mostrar mensajes con snackbar
+            function showSnackbar(message, action = null) {
+                // Eliminar snackbar existente si hay alguno
+                const existingSnackbar = document.querySelector('.md-snackbar');
+                if (existingSnackbar) {
+                    existingSnackbar.remove();
+                }
+
+                // Crear nuevo snackbar
+                const snackbar = document.createElement('div');
+                snackbar.className = 'md-snackbar';
+
+                // Agregar mensaje
+                const text = document.createElement('div');
+                text.className = 'md-snackbar__text';
+                text.textContent = message;
+                snackbar.appendChild(text);
+
+                // Agregar botón de acción si se proporciona
+                if (action) {
+                    const actionButton = document.createElement('button');
+                    actionButton.className = 'md-snackbar__action';
+                    actionButton.textContent = action.text;
+                    actionButton.addEventListener('click', action.handler);
+                    snackbar.appendChild(actionButton);
+                }
+
+                // Agregar al DOM
+                document.body.appendChild(snackbar);
+
+                // Mostrar el snackbar después de un breve retraso
+                setTimeout(() => {
+                    snackbar.classList.add('md-snackbar--visible');
+                }, 10);
+
+                // Ocultar después de 5 segundos
+                setTimeout(() => {
+                    snackbar.classList.remove('md-snackbar--visible');
+                    setTimeout(() => {
+                        snackbar.remove();
+                    }, 300);
+                }, 5000);
+            }
+        });
     </script>
-</body>
-</html>

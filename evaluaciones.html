@@ -5,93 +5,177 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Evaluaciones</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="material-study.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 
-<body class="bg-light">
-    <div class="container py-4">
+<body>
+    <!-- Barra superior -->
+    <header class="md-top-app-bar">
+        <div class="md-top-app-bar__row">
+            <section class="md-top-app-bar__section">
+                <span class="md-top-app-bar__nav-icon" id="menu-toggle">
+                    <span class="material-icons">menu</span>
+                </span>
+                <span class="md-top-app-bar__title">Evaluación</span>
+            </section>
+            <section class="md-top-app-bar__section--align-end">
+                <div class="md-top-app-bar__action-item">
+                    <span class="material-icons">notifications</span>
+                </div>
+                <div class="md-top-app-bar__action-item" id="theme-toggle">
+                    <span class="material-icons">dark_mode</span>
+                </div>
+                <div class="md-top-app-bar__action-item">
+                    <div class="md-avatar md-avatar--small">
+                        <span>U</span>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </header>
 
-        <!-- Barra de navegación -->
-        <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm p-3 mb-4">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="#">Evaluaciones</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav me-auto">
-                        <li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
-                        <!-- <li class="nav-item"><a class="nav-link" href="admin-usuarios.html">Usuarios</a></li> -->
-                        <li class="nav-item"><a class="nav-link" href="grupos.html">Grupos</a></li>
-                        <li class="nav-item"><a class="nav-link" href="tareas.html">Tareas</a></li>
-                        <li class="nav-item"><a class="nav-link" href="calendario.html">Calendario</a></li>
-                        <li class="nav-item"><a class="nav-link" href="resumenes.html">Resúmenes</a></li>
-                        <li class="nav-item"><a class="nav-link" href="chat.html">Chat</a></li>
-                        <li class="nav-item"><a class="nav-link" href="evaluaciones.html">Evaluaciones</a></li>
+    <!-- Navigation Drawer -->
+    <nav class="md-drawer" id="main-drawer">
+        <div class="md-drawer__header">
+            <span class="md-drawer__title">Menú</span>
+        </div>
+        <div class="md-drawer__content">
+            <nav class="md-nav-list">
+                <a href="dashboard.html" class="md-nav-list__item">
+                    <span class="md-nav-list__icon material-icons">dashboard</span>
+                    <span class="md-nav-list__text">Dashboard</span>
+                </a>
+                <a href="grupos.html" class="md-nav-list__item">
+                    <span class="md-nav-list__icon material-icons">group</span>
+                    <span class="md-nav-list__text">Grupos</span>
+                </a>
+                <a href="tareas.html" class="md-nav-list__item ">
+                    <span class="md-nav-list__icon material-icons">assignment</span>
+                    <span class="md-nav-list__text">Tareas</span>
+                </a>
+                <a href="calendario.html" class="md-nav-list__item">
+                    <span class="md-nav-list__icon material-icons">calendar_today</span>
+                    <span class="md-nav-list__text">Calendario</span>
+                </a>
+                <a href="resumenes.html" class="md-nav-list__item">
+                    <span class="md-nav-list__icon material-icons">summarize</span>
+                    <span class="md-nav-list__text">Resúmenes</span>
+                </a>
+                <a href="chat.html" class="md-nav-list__item">
+                    <span class="md-nav-list__icon material-icons">chat</span>
+                    <span class="md-nav-list__text">Chat</span>
+                </a>
+                <a href="evaluaciones.html" class="md-nav-list__item md-nav-list__item--active">
+                    <span class="md-nav-list__icon material-icons">assignment_turned_in</span>
+                    <span class="md-nav-list__text">Evaluaciones</span>
+                </a>
+            </nav>
+        </div>
+    </nav>
+
+    <!-- Overlay for drawer -->
+    <div class="md-drawer__overlay" id="drawer-overlay"></div>
+
+    <!-- Main Content -->
+    <main class="md-layout-grid container md-mt-large">
+        <div class="md-layout-grid__cell md-layout-grid__cell--span-4-desktop">
+            <div class="md-card">
+                <h3 class="md-card__title">Compañeros para Evaluar</h3>
+                <div class="md-card__content">
+                    <div class="md-select md-mb-medium">
+                        <select id="equipo-select" class="md-select__input">
+                            <option value="">Selecciona un equipo</option>
+                            <option value="equipo1">Equipo de Matemáticas</option>
+                            <option value="equipo2">Equipo de Física</option>
+                            <option value="equipo3">Equipo de Historia</option>
+                        </select>
+                        <span class="md-select__icon material-icons">expand_more</span>
+                    </div>
+
+                    <ul id="lista-companeros" class="md-list">
+                        <!-- Los compañeros se agregarán aquí dinámicamente -->
                     </ul>
-                    <div class="d-flex align-items-center">
-    <span id="user-name" class="me-2 fw-bold">Usuario</span>
-    <div class="rounded-circle bg-secondary d-flex justify-content-center align-items-center" style="width: 40px; height: 40px;">
-        <i class="bi bi-person text-white"></i>
-    </div>
-</div>
-                </div>
-            </div>
-        </nav>
-
-        <!-- Contenido principal -->
-        <div class="container">
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="card shadow-sm mb-4">
-                        <div class="card-body">
-                            <h5 class="card-title">Compañeros para Evaluar</h5>
-                            <!-- Desplegable para seleccionar equipo -->
-                            <select id="equipo-select" class="form-select mb-3">
-                                <option value="">Selecciona un equipo</option>
-                                <option value="equipo1">Equipo de Matemáticas</option>
-                                <option value="equipo2">Equipo de Física</option>
-                                <option value="equipo3">Equipo de Historia</option>
-                            </select>
-                            <!-- Lista de compañeros -->
-                            <ul id="lista-companeros" class="list-group">
-                                <!-- Los compañeros se agregarán aquí dinámicamente -->
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-8">
-                    <div class="card shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title">Evaluar a <span id="nombre-companero"></span></h5>
-                            <form id="evaluacion-form">
-                                <div class="mb-3">
-                                    <label for="calificacion" class="form-label">Calificación (1-5):</label>
-                                    <input type="number" id="calificacion" class="form-control" min="1" max="5"
-                                        required>
-                                </div>
-                                <div class="mb-3">
-                                    <label for="comentarios" class="form-label">Comentarios:</label>
-                                    <textarea id="comentarios" class="form-control" rows="4" required></textarea>
-                                </div>
-                                <button type="submit" class="btn btn-primary w-100">Enviar Evaluación</button>
-                            </form>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
+
+        <div class="md-layout-grid__cell md-layout-grid__cell--span-8-desktop">
+            <div class="md-card">
+                <h3 class="md-card__title">Evaluar a <span id="nombre-companero"></span></h3>
+                <div class="md-card__content">
+                    <form id="evaluacion-form">
+                        <div class="md-text-field md-mb-medium">
+                            <input type="number" id="calificacion" class="md-text-field__input" placeholder=" " min="1"
+                                max="5" required>
+                            <label for="calificacion" class="md-text-field__label">Calificación (1-5)</label>
+                        </div>
+                        <div class="md-text-field md-mb-medium">
+                            <textarea id="comentarios" class="md-text-field__input" placeholder=" " rows="4"
+                                required></textarea>
+                            <label for="comentarios" class="md-text-field__label">Comentarios</label>
+                        </div>
+                        <button type="submit" class="md-button md-button--filled w-100">Enviar Evaluación</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </main>
     </div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Floating Action Button -->
+    <div class="md-fab">
+        <i class="material-icons">add</i>
+    </div>
+
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const equipoSelect = document.getElementById('equipo-select');
             const listaCompaneros = document.getElementById('lista-companeros');
             const evaluacionForm = document.getElementById('evaluacion-form');
             const nombreCompanero = document.getElementById('nombre-companero');
+            const drawerToggle = document.querySelector('.md-top-app-bar__nav-icon');
+            const drawer = document.querySelector('.md-drawer');
+            const drawerOverlay = document.getElementById('drawer-overlay');
+            const themeToggle = document.getElementById('theme-toggle');
+            const themeIcon = themeToggle.querySelector('.material-icons');
+
+            function toggleTheme() {
+                const htmlElement = document.documentElement;
+                const currentTheme = localStorage.getItem('theme');
+
+                if (currentTheme === 'dark') {
+                    // Switch to light mode
+                    htmlElement.style.colorScheme = 'light';
+                    localStorage.setItem('theme', 'light');
+                    document.querySelector('#theme-toggle .material-icons').textContent = 'dark_mode';
+                } else {
+                    // Switch to dark mode
+                    htmlElement.style.colorScheme = 'dark';
+                    localStorage.setItem('theme', 'dark');
+                    document.querySelector('#theme-toggle .material-icons').textContent = 'light_mode';
+                }
+            }
+
+            // Initialize theme
+            function initTheme() {
+                const savedTheme = localStorage.getItem('theme');
+                const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+                if (savedTheme === 'dark' || (!savedTheme && systemPrefersDark)) {
+                    document.documentElement.style.colorScheme = 'dark';
+                    document.querySelector('#theme-toggle .material-icons').textContent = 'light_mode';
+                } else {
+                    document.documentElement.style.colorScheme = 'light';
+                    document.querySelector('#theme-toggle .material-icons').textContent = 'dark_mode';
+                }
+            }
+
+            // Attach event listener
+            document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
+
+            // Initialize on page load
+            initTheme();
 
             // Datos de ejemplo de compañeros por equipo
             const companerosPorEquipo = {
@@ -106,8 +190,11 @@
                 const companeros = companerosPorEquipo[equipo] || [];
                 companeros.forEach(companero => {
                     const item = document.createElement('li');
-                    item.classList.add('list-group-item', 'list-group-item-action');
-                    item.textContent = companero;
+                    item.classList.add('md-list__item');
+                    const text = document.createElement('span');
+                    text.classList.add('md-list__text');
+                    text.textContent = companero;
+                    item.appendChild(text);
                     item.onclick = () => mostrarFormulario(companero);
                     listaCompaneros.appendChild(item);
                 });
@@ -137,6 +224,17 @@ Comentarios: ${comentarios}`);
                 } else {
                     alert('Por favor, completa todos los campos.');
                 }
+            });
+
+            // Drawer toggle functionality
+            drawerToggle.addEventListener('click', function () {
+                drawer.classList.toggle('md-drawer--open');
+                drawerOverlay.classList.toggle('md-drawer__overlay--open');
+            });
+
+            drawerOverlay.addEventListener('click', function () {
+                drawer.classList.remove('md-drawer--open');
+                drawerOverlay.classList.remove('md-drawer__overlay--open');
             });
 
             // Renderizar compañeros iniciales

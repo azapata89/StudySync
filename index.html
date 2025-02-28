@@ -4,40 +4,358 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestión de Usuarios</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Estudio Colectivo UNAL</title>
+    <!-- Fuentes de Material Design -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Estilos Material Design 3 -->
+    <style>
+        :root {
+            /* Sistema de colores para estudio */
+            --md-primary-40: #1565C0; /* Azul más oscuro */
+            --md-primary-50: #1976D2; /* Azul principal */
+            --md-primary-60: #1E88E5;
+            --md-primary-80: #90CAF9;
+            --md-primary-90: #E3F2FD;
+            --md-primary-95: #F0F8FF;
+            --md-primary-99: #FCFCFC;
+
+            --md-secondary-40: #2E7D32; /* Verde más oscuro */
+            --md-secondary-50: #388E3C; /* Verde principal */
+            --md-secondary-60: #43A047;
+            --md-secondary-80: #A5D6A7;
+            --md-secondary-90: #E8F5E9;
+            --md-secondary-95: #F1F8E9;
+
+            --md-tertiary-40: #7B1FA2; /* Violeta más oscuro */
+            --md-tertiary-50: #8E24AA; /* Violeta principal */
+            --md-tertiary-60: #9C27B0;
+            --md-tertiary-80: #CE93D8;
+            --md-tertiary-90: #F3E5F5;
+
+            /* Estados */
+            --md-error: #B00020;
+            --md-success: #4CAF50;
+            
+            /* Superficies */
+            --md-surface: #FFFFFF;
+            --md-background: #F5F7FA;
+            --md-surface-variant: #EEF2F6;
+
+            /* Texto */
+            --md-on-primary: #FFFFFF;
+            --md-on-surface: #202124;
+            --md-on-surface-variant: #5F6368;
+
+            /* Tipografía */
+            --md-headline-large: 2rem;
+            --md-headline-medium: 1.75rem;
+            --md-headline-small: 1.5rem;
+            
+            --md-title-large: 1.25rem;
+            --md-title-medium: 1rem;
+            --md-title-small: 0.875rem;
+            
+            --md-body-large: 1rem;
+            --md-body-medium: 0.875rem;
+            --md-body-small: 0.75rem;
+
+            /* Elevación */
+            --md-elevation-1: 0 1px 3px rgba(0, 0, 0, 0.1);
+            --md-elevation-2: 0 2px 6px rgba(0, 0, 0, 0.08);
+            --md-elevation-3: 0 4px 10px rgba(0, 0, 0, 0.08);
+            
+            /* Radios */
+            --md-radius-small: 4px;
+            --md-radius-medium: 8px;
+            --md-radius-large: 16px;
+            --md-radius-extra-large: 28px;
+            
+            /* Espaciado */
+            --md-spacing-small: 8px;
+            --md-spacing-medium: 16px;
+            --md-spacing-large: 24px;
+            --md-spacing-extra-large: 32px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--md-background);
+            color: var(--md-on-surface);
+            line-height: 1.5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-image: linear-gradient(135deg, var(--md-primary-90), var(--md-secondary-90));
+        }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            width: 100%;
+            max-width: 420px;
+            padding: var(--md-spacing-medium);
+        }
+
+        .logo-container {
+            text-align: center;
+            margin-bottom: var(--md-spacing-large);
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        .logo {
+            width: 120px;
+            margin-bottom: var(--md-spacing-small);
+            filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+        }
+
+        .app-title {
+            color: var(--md-primary-40);
+            font-size: var(--md-headline-medium);
+            font-weight: 500;
+            margin-bottom: var(--md-spacing-small);
+        }
+
+        .app-subtitle {
+            color: var(--md-on-surface-variant);
+            font-size: var(--md-body-large);
+            margin-bottom: var(--md-spacing-large);
+        }
+
+        .md-card {
+            background-color: var(--md-surface);
+            border-radius: var(--md-radius-medium);
+            box-shadow: var(--md-elevation-3);
+            padding: var(--md-spacing-large);
+            margin-bottom: var(--md-spacing-large);
+            animation: slideUp 0.5s ease-out;
+        }
+
+        .md-card__title {
+            font-size: var(--md-title-large);
+            font-weight: 500;
+            margin-bottom: var(--md-spacing-large);
+            color: var(--md-primary-50);
+        }
+
+        .form-section {
+            display: flex;
+            flex-direction: column;
+            gap: var(--md-spacing-large);
+        }
+
+        .md-text-field {
+            position: relative;
+            margin-bottom: var(--md-spacing-medium);
+        }
+
+        .md-text-field__input {
+            width: 100%;
+            padding: 16px;
+            border: 1px solid var(--md-on-surface-variant);
+            border-radius: var(--md-radius-small);
+            font-size: var(--md-body-large);
+            background-color: transparent;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        .md-text-field__input:focus {
+            outline: none;
+            border-color: var(--md-primary-50);
+            box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.2);
+        }
+
+        .md-text-field__label {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--md-on-surface-variant);
+            transition: all 0.3s;
+            pointer-events: none;
+            font-size: var(--md-body-medium);
+            padding: 0 4px;
+        }
+
+        .md-text-field__input:focus + .md-text-field__label,
+        .md-text-field__input:not(:placeholder-shown) + .md-text-field__label {
+            top: 0;
+            left: 10px;
+            font-size: var(--md-body-small);
+            background-color: var(--md-surface);
+            padding: 0 4px;
+            color: var(--md-primary-50);
+        }
+
+        .md-text-field__input::placeholder {
+            color: transparent;
+        }
+
+        .md-button {
+            border: none;
+            border-radius: var(--md-radius-small);
+            padding: var(--md-spacing-medium) var(--md-spacing-large);
+            font-size: var(--md-body-large);
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
+            width: 100%;
+            margin-bottom: var(--md-spacing-medium);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: var(--md-spacing-small);
+        }
+
+        .md-button--filled {
+            background-color: var(--md-primary-50);
+            color: var(--md-on-primary);
+            box-shadow: var(--md-elevation-1);
+        }
+
+        .md-button--filled:hover {
+            background-color: var(--md-primary-40);
+            box-shadow: var(--md-elevation-2);
+        }
+
+        .md-button--filled:active {
+            transform: scale(0.98);
+        }
+
+        .md-button--text {
+            background-color: transparent;
+            color: var(--md-primary-50);
+        }
+
+        .md-button--text:hover {
+            background-color: rgba(25, 118, 210, 0.08);
+        }
+
+        .md-button--secondary {
+            background-color: transparent;
+            color: var(--md-secondary-50);
+            border: 1px solid var(--md-secondary-50);
+        }
+
+        .md-button--secondary:hover {
+            background-color: rgba(56, 142, 60, 0.08);
+        }
+
+        .footer-text {
+            text-align: center;
+            color: var(--md-on-surface-variant);
+            font-size: var(--md-body-small);
+            margin-top: var(--md-spacing-large);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: var(--md-spacing-small);
+            }
+            
+            .md-card {
+                padding: var(--md-spacing-medium);
+            }
+        }
+
+        /* Animaciones */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
 </head>
 
 <body>
     <div class="container">
-        <!-- Interfaz de Login -->
-        <div id="login-section" class="form-section">
-            <h2>Iniciar Sesión</h2>
-            <form id="login-form">
-                <input type="email" id="login-email" placeholder="Correo electrónico" required>
-                <input type="password" id="login-password" placeholder="Contraseña" required>
-                <button type="submit">Iniciar Sesión</button>
-            </form>
-            <button id="forgot-password">¿Olvidaste tu contraseña?</button>
-            <button id="go-to-register">Registrarse</button>
+        <div class="logo-container">
+            <img src="https://minas.medellin.unal.edu.co/proyectos/one-health-consortium/images/unal.png" alt="Logo UNAL" class="logo">
+            <h1 class="app-title">Estudio Colectivo UNAL</h1>
+            <p class="app-subtitle">Organiza tus sesiones de estudio y colabora con compañeros</p>
         </div>
 
-        <!-- Interfaz de Registro -->
-        <div id="register-section" class="form-section" style="display: none;">
-            <h2>Registrarse</h2>
-            <form id="register-form">
-                <input type="text" id="register-name" placeholder="Nombre completo" required>
-                <input type="email" id="register-email" placeholder="Correo electrónico" required>
-                <input type="password" id="register-password" placeholder="Contraseña" required>
-                <input type="password" id="register-confirm-password" placeholder="Confirmar contraseña" required>
-                <button type="submit">Registrarse</button>
+        <!-- Interfaz de Login -->
+        <div id="login-section" class="md-card form-section">
+            <h2 class="md-card__title">Iniciar Sesión</h2>
+            <form id="login-form">
+                <div class="md-text-field">
+                    <input type="email" id="login-email" class="md-text-field__input" placeholder=" " required>
+                    <label for="login-email" class="md-text-field__label">Correo electrónico</label>
+                </div>
+                <div class="md-text-field">
+                    <input type="password" id="login-password" class="md-text-field__input" placeholder=" " required>
+                    <label for="login-password" class="md-text-field__label">Contraseña</label>
+                </div>
+                <button type="submit" class="md-button md-button--filled">
+                    <span class="material-icons">login</span>
+                    Iniciar Sesión
+                </button>
+                <button id="forgot-password" type="button" class="md-button md-button--text">
+                    <span class="material-icons">help_outline</span>
+                    ¿Olvidaste tu contraseña?
+                </button>
+                <button id="go-to-register" type="button" class="md-button md-button--secondary">
+                    <span class="material-icons">person_add</span>
+                    Crear una cuenta
+                </button>
             </form>
-            <button id="go-to-login">Volver a Iniciar Sesión</button>
         </div>
+
+        <!-- Interfaz de Registro (inicialmente oculta) -->
+        <div id="register-section" class="md-card form-section" style="display: none;">
+            <h2 class="md-card__title">Registrarse</h2>
+            <form id="register-form">
+                <div class="md-text-field">
+                    <input type="text" id="register-name" class="md-text-field__input" placeholder=" " required>
+                    <label for="register-name" class="md-text-field__label">Nombre completo</label>
+                </div>
+                <div class="md-text-field">
+                    <input type="email" id="register-email" class="md-text-field__input" placeholder=" " required>
+                    <label for="register-email" class="md-text-field__label">Correo electrónico</label>
+                </div>
+                <div class="md-text-field">
+                    <input type="password" id="register-password" class="md-text-field__input" placeholder=" " required>
+                    <label for="register-password" class="md-text-field__label">Contraseña</label>
+                </div>
+                <div class="md-text-field">
+                    <input type="password" id="register-confirm-password" class="md-text-field__input" placeholder=" " required>
+                    <label for="register-confirm-password" class="md-text-field__label">Confirmar contraseña</label>
+                </div>
+                <button type="submit" class="md-button md-button--filled">
+                    <span class="material-icons">how_to_reg</span>
+                    Registrarse
+                </button>
+                <button id="go-to-login" type="button" class="md-button md-button--text">
+                    <span class="material-icons">arrow_back</span>
+                    Volver a Iniciar Sesión
+                </button>
+            </form>
+        </div>
+        
+        <p class="footer-text">© 2025 Universidad Nacional de Colombia - Todos los derechos reservados</p>
     </div>
 
     <script>
-        // scripts.js
         document.addEventListener('DOMContentLoaded', function () {
             const loginSection = document.getElementById('login-section');
             const registerSection = document.getElementById('register-section');
@@ -65,13 +383,12 @@
                 const email = document.getElementById('login-email').value;
                 const password = document.getElementById('login-password').value;
 
-                // Validación simple (mock)
-                if (true) {
-                    alert('Inicio de sesión exitoso');
-                    // Redirigir al dashboard o a la gestión de grupos
-                    window.location.href = 'grupos.html'; // Cambia a 'dashboard.html' si prefieres
+                // Validación simple
+                if (email && password) {
+                    // Simular inicio de sesión exitoso
+                    window.location.href = 'dashboard.html';
                 } else {
-                    alert('Correo o contraseña incorrectos');
+                    alert('Por favor, complete todos los campos');
                 }
             });
 
@@ -83,24 +400,25 @@
                 const password = document.getElementById('register-password').value;
                 const confirmPassword = document.getElementById('register-confirm-password').value;
 
-                // Validación simple (mock)
+                // Validación simple
                 if (password !== confirmPassword) {
                     alert('Las contraseñas no coinciden');
                     return;
                 }
 
-                // Simular registro exitoso
-                alert('Registro exitoso');
-                registerSection.style.display = 'none';
-                loginSection.style.display = 'block';
-
-                // Redirigir a la gestión de grupos después del registro
-                window.location.href = 'grupos.html'; // Cambia a 'dashboard.html' si prefieres
+                if (name && email && password && confirmPassword) {
+                    // Simular registro exitoso
+                    alert('Registro exitoso! Por favor inicia sesión.');
+                    registerSection.style.display = 'none';
+                    loginSection.style.display = 'block';
+                } else {
+                    alert('Por favor, complete todos los campos');
+                }
             });
 
-            // Manejar la recuperación de contraseña
+            // Manejar recuperación de contraseña
             forgotPasswordButton.addEventListener('click', function () {
-                alert('Se ha enviado un correo para restablecer la contraseña');
+                alert('Se ha enviado un correo con instrucciones para restablecer tu contraseña.');
             });
         });
     </script>

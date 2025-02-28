@@ -3,109 +3,168 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestión de Tareas</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <title>Gestión de Tareas - Estudio Colectivo UNAL</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="material-study.css">
 </head>
-<body class="bg-light">
-    <div class="container py-4">
-        <!-- Barra de navegación -->
-        <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm p-3 mb-4">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="#">Gestión de Tareas</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav me-auto">
-                        <li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
-                        <!-- <li class="nav-item"><a class="nav-link" href="admin-usuarios.html">Usuarios</a></li> -->
-                        <li class="nav-item"><a class="nav-link" href="grupos.html">Grupos</a></li>
-                        <li class="nav-item"><a class="nav-link" href="tareas.html">Tareas</a></li>
-                        <li class="nav-item"><a class="nav-link" href="calendario.html">Calendario</a></li>
-                        <li class="nav-item"><a class="nav-link" href="resumenes.html">Resumenes</a></li>
-                        <li class="nav-item"><a class="nav-link" href="chat.html">Chat</a></li>
-                        <li class="nav-item"><a class="nav-link" href="evaluaciones.html">Evaluaciones</a></li>
-                    </ul>
-                    <div class="d-flex align-items-center">
-    <span id="user-name" class="me-2 fw-bold">Usuario</span>
-    <div class="rounded-circle bg-secondary d-flex justify-content-center align-items-center" style="width: 40px; height: 40px;">
-        <i class="bi bi-person text-white"></i>
-    </div>
-</div>
+<body>
+    <!-- Barra superior -->
+    <header class="md-top-app-bar">
+        <div class="md-top-app-bar__row">
+            <section class="md-top-app-bar__section">
+                <span class="md-top-app-bar__nav-icon" id="menu-toggle">
+                    <span class="material-icons">menu</span>
+                </span>
+                <span class="md-top-app-bar__title">Gestión de Tareas</span>
+            </section>
+            <section class="md-top-app-bar__section--align-end">
+                <div class="md-top-app-bar__action-item">
+                    <span class="material-icons">notifications</span>
                 </div>
-            </div>
-        </nav>
-
-        <!-- Contenido principal -->
-        <div class="row">
-            <div class="col-md-6">
-                <div class="card mb-4 shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">Crear Nueva Tarea</h5>
-                        <form id="crear-tarea-form">
-                            <div class="mb-3">
-                                <input type="text" id="titulo-tarea" class="form-control" placeholder="Título de la tarea" required>
-                            </div>
-                            <div class="mb-3">
-                                <textarea id="descripcion-tarea" class="form-control" placeholder="Descripción de la tarea" required></textarea>
-                            </div>
-                            <div class="mb-3">
-                                <select id="complejidad-tarea" class="form-select" required>
-                                    <option value="">Selecciona la complejidad</option>
-                                    <option value="baja">Baja</option>
-                                    <option value="media">Media</option>
-                                    <option value="alta">Alta</option>
-                                </select>
-                            </div>
-                            <div class="mb-3">
-                                <input type="date" id="fecha-vencimiento" class="form-control" required>
-                            </div>
-                            <div class="mb-3">
-                                <select id="usuario-asignado" class="form-select" required>
-                                    <option value="">Selecciona un usuario</option>
-                                    <option value="Juan Pérez">Juan Pérez</option>
-                                    <option value="María Gómez">María Gómez</option>
-                                    <option value="Carlos López">Carlos López</option>
-                                    <option value="Ana Torres">Ana Torres</option>
-                                    <option value="Luis Ramírez">Luis Ramírez</option>
-                                </select>
-                            </div>
-                            <button type="submit" class="btn btn-primary">Crear Tarea</button>
-                        </form>
+                <div class="md-top-app-bar__action-item" id="theme-toggle">
+                    <span class="material-icons">dark_mode</span>
+                </div>
+                <div class="md-top-app-bar__action-item">
+                    <div class="md-avatar md-avatar--small">
+                        <span>U</span>
                     </div>
                 </div>
+            </section>
+        </div>
+    </header>
+
+    <!-- Navegación lateral -->
+    <div class="md-drawer" id="nav-drawer">
+        <div class="md-drawer__header">
+            <div class="md-drawer__title">Estudio Colectivo UNAL</div>
+        </div>
+        <div class="md-drawer__content">
+            <nav class="md-nav-list">
+                <a href="dashboard.html" class="md-nav-list__item">
+                    <span class="md-nav-list__icon material-icons">dashboard</span>
+                    <span class="md-nav-list__text">Dashboard</span>
+                </a>
+                <a href="grupos.html" class="md-nav-list__item">
+                    <span class="md-nav-list__icon material-icons">group</span>
+                    <span class="md-nav-list__text">Grupos</span>
+                </a>
+                <a href="tareas.html" class="md-nav-list__item md-nav-list__item--active">
+                    <span class="md-nav-list__icon material-icons">assignment</span>
+                    <span class="md-nav-list__text">Tareas</span>
+                </a>
+                <a href="calendario.html" class="md-nav-list__item">
+                    <span class="md-nav-list__icon material-icons">calendar_today</span>
+                    <span class="md-nav-list__text">Calendario</span>
+                </a>
+                <a href="resumenes.html" class="md-nav-list__item">
+                    <span class="md-nav-list__icon material-icons">summarize</span>
+                    <span class="md-nav-list__text">Resúmenes</span>
+                </a>
+                <a href="chat.html" class="md-nav-list__item">
+                    <span class="md-nav-list__icon material-icons">chat</span>
+                    <span class="md-nav-list__text">Chat</span>
+                </a>
+                <a href="evaluaciones.html" class="md-nav-list__item">
+                    <span class="md-nav-list__icon material-icons">assignment_turned_in</span>
+                    <span class="md-nav-list__text">Evaluaciones</span>
+                </a>
+            </nav>
+        </div>
+    </div>
+    <div class="md-drawer__overlay" id="drawer-overlay"></div>
+
+    <!-- Contenido principal -->
+    <main class="container md-mt-large">
+        <div class="md-layout-grid">
+            <!-- Sección de creación de tareas -->
+            <div class="md-layout-grid__cell md-layout-grid__cell--span-6-desktop">
+                <div class="md-card">
+                    <h4 class="md-card__title">Crear Nueva Tarea</h4>
+                    <form id="crear-tarea-form">
+                        <div class="md-text-field md-mb-medium">
+                            <input id="titulo-tarea" class="md-text-field__input" type="text" placeholder=" " required>
+                            <label for="titulo-tarea" class="md-text-field__label">Título de la tarea</label>
+                        </div>
+                        <div class="md-text-field md-mb-medium">
+                            <textarea id="descripcion-tarea" class="md-text-field__input" rows="3" placeholder=" " required></textarea>
+                            <label for="descripcion-tarea" class="md-text-field__label">Descripción de la tarea</label>
+                        </div>
+
+                        <div class="md-text-field md-mb-medium">
+                            <select id="complejidad-tarea" class="md-text-field__input" required>
+                                <option value="" disabled selected></option>
+                                <option value="baja">Baja</option>
+                                <option value="media">Media</option>
+                                <option value="alta">Alta</option>
+                            </select>
+                            <label for="complejidad-tarea" class="md-text-field__label">Complejidad</label>
+                        </div>
+
+                        <div class="md-text-field md-mb-medium">
+                            <input id="fecha-vencimiento" class="md-text-field__input" type="date" required>
+                            <label for="fecha-vencimiento" class="md-text-field__label">Fecha de vencimiento</label>
+                        </div>
+
+                        <div class="md-text-field md-mb-medium">
+                            <select id="usuario-asignado" class="md-text-field__input" required>
+                                <option value="" disabled selected></option>
+                                <option value="Juan Pérez">Juan Pérez</option>
+                                <option value="María Gómez">María Gómez</option>
+                                <option value="Carlos López">Carlos López</option>
+                                <option value="Ana Torres">Ana Torres</option>
+                                <option value="Luis Ramírez">Luis Ramírez</option>
+                            </select>
+                            <label for="usuario-asignado" class="md-text-field__label">Usuario asignado</label>
+                        </div>
+
+                        <div class="md-card__actions">
+                            <button type="submit" class="md-button md-button--filled">Crear Tarea</button>
+                            <button type="reset" class="md-button md-button--text">Limpiar</button>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="col-md-6">
-                <div class="card mb-4 shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">Tareas Pendientes</h5>
-                        <!-- Desplegable para seleccionar equipo -->
-                        <select id="equipo-select" class="form-select mb-3">
-                            <option value="">Selecciona un equipo</option>
+
+            <!-- Sección de tareas pendientes -->
+            <div class="md-layout-grid__cell md-layout-grid__cell--span-6-desktop">
+                <div class="md-card">
+                    <h4 class="md-card__title">Tareas Pendientes</h4>
+                    
+                    <div class="md-text-field md-mb-medium">
+                        <select id="equipo-select" class="md-text-field__input" required>
+                            <option value="" disabled selected></option>
                             <option value="equipo1">Equipo de Matemáticas</option>
                             <option value="equipo2">Equipo de Física</option>
                             <option value="equipo3">Equipo de Historia</option>
                         </select>
-                        <!-- Lista de tareas -->
-                        <div id="tareas-pendientes" class="list-group">
-                            <!-- Las tareas se agregarán aquí dinámicamente -->
-                        </div>
+                        <label for="equipo-select" class="md-text-field__label">Selecciona un equipo</label>
+                    </div>
+
+                    <div id="tareas-pendientes" class="md-list">
+                        <!-- Las tareas se agregarán aquí dinámicamente -->
                     </div>
                 </div>
             </div>
         </div>
+    </main>
+
+    <!-- Botón flotante para añadir tarea rápida -->
+    <div class="md-fab" id="agregar-tarea-rapida">
+        <span class="material-icons">add</span>
     </div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Javascript -->
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const crearTareaForm = document.getElementById('crear-tarea-form');
             const listaTareas = document.getElementById('tareas-pendientes');
             const equipoSelect = document.getElementById('equipo-select');
-            let tareas = [];
-
+            const menuToggle = document.getElementById('menu-toggle');
+            const navDrawer = document.getElementById('nav-drawer');
+            const drawerOverlay = document.getElementById('drawer-overlay');
+            const themeToggle = document.getElementById('theme-toggle');
+            
             // Datos de ejemplo de tareas por equipo
             const tareasPorEquipo = {
                 equipo1: [
@@ -124,25 +183,84 @@
             function renderizarTareas(equipo) {
                 listaTareas.innerHTML = '';
                 const tareasEquipo = tareasPorEquipo[equipo] || [];
+                
+                if (tareasEquipo.length === 0) {
+                    const mensajeVacio = document.createElement('div');
+                    mensajeVacio.classList.add('md-card__subtitle', 'md-text-center');
+                    mensajeVacio.textContent = 'No hay tareas pendientes para este equipo';
+                    listaTareas.appendChild(mensajeVacio);
+                    return;
+                }
+                
                 tareasEquipo.forEach((tarea, index) => {
+                    // Definir color de complejidad
+                    let colorComplejidad = '';
+                    switch(tarea.complejidad) {
+                        case 'baja':
+                            colorComplejidad = 'var(--md-success)';
+                            break;
+                        case 'media':
+                            colorComplejidad = 'var(--md-warning)';
+                            break;
+                        case 'alta':
+                            colorComplejidad = 'var(--md-error)';
+                            break;
+                    }
+                    
                     const tareaElement = document.createElement('div');
-                    tareaElement.classList.add('list-group-item');
+                    tareaElement.classList.add('md-list__item');
                     tareaElement.innerHTML = `
-                        <div>
-                            <h6>${tarea.titulo}</h6>
-                            <p>${tarea.descripcion}</p>
-                            <p><strong>Complejidad:</strong> ${tarea.complejidad}</p>
-                            <p><strong>Fecha de vencimiento:</strong> ${tarea.fecha}</p>
-                            <p><strong>Usuario asignado:</strong> ${tarea.usuario}</p>
+                        <div class="md-list__text">
+                            <div class="md-list__primary-text">${tarea.titulo}</div>
+                            <div class="md-list__secondary-text">${tarea.descripcion}</div>
+                            <div class="md-list__secondary-text">
+                                <span class="md-chip" style="background-color: ${colorComplejidad}10; color: ${colorComplejidad}; border: 1px solid ${colorComplejidad}">
+                                    ${tarea.complejidad}
+                                </span>
+                                <span class="md-chip">
+                                    <span class="material-icons md-chip__icon" style="font-size: 16px;">calendar_today</span>
+                                    ${tarea.fecha}
+                                </span>
+                                <span class="md-chip">
+                                    <span class="material-icons md-chip__icon" style="font-size: 16px;">person</span>
+                                    ${tarea.usuario}
+                                </span>
+                            </div>
                         </div>
-                        <div class="d-flex justify-content-end gap-2">
-                            <button class="btn btn-warning btn-sm" onclick="editarTarea('${equipo}', ${index})">Editar</button>
-                            <button class="btn btn-danger btn-sm" onclick="eliminarTarea('${equipo}', ${index})">Eliminar</button>
+                        <div class="md-list__meta">
+                            <button class="md-button md-button--icon" onclick="editarTarea('${equipo}', ${index})">
+                                <span class="material-icons">edit</span>
+                            </button>
+                            <button class="md-button md-button--icon" onclick="eliminarTarea('${equipo}', ${index})">
+                                <span class="material-icons">delete</span>
+                            </button>
                         </div>
                     `;
                     listaTareas.appendChild(tareaElement);
                 });
             }
+
+            // Toggle del menú lateral
+            menuToggle.addEventListener('click', function() {
+                navDrawer.classList.toggle('md-drawer--open');
+                drawerOverlay.classList.toggle('md-drawer__overlay--open');
+            });
+
+            drawerOverlay.addEventListener('click', function() {
+                navDrawer.classList.remove('md-drawer--open');
+                drawerOverlay.classList.remove('md-drawer__overlay--open');
+            });
+
+            // Toggle del tema oscuro/claro
+            themeToggle.addEventListener('click', function() {
+                document.body.classList.toggle('dark-theme');
+                const icon = themeToggle.querySelector('.material-icons');
+                if (document.body.classList.contains('dark-theme')) {
+                    icon.textContent = 'light_mode';
+                } else {
+                    icon.textContent = 'dark_mode';
+                }
+            });
 
             // Escuchar cambios en el menú desplegable de equipos
             equipoSelect.addEventListener('change', function () {
@@ -161,18 +279,70 @@
                 const equipoSeleccionado = equipoSelect.value;
 
                 if (titulo && descripcion && complejidad && fecha && usuario && equipoSeleccionado) {
+                    if (!tareasPorEquipo[equipoSeleccionado]) {
+                        tareasPorEquipo[equipoSeleccionado] = [];
+                    }
+                    
                     tareasPorEquipo[equipoSeleccionado].push({ titulo, descripcion, complejidad, fecha, usuario });
                     renderizarTareas(equipoSeleccionado);
+                    
+                    // Mostrar snackbar de confirmación
+                    mostrarSnackbar('Tarea creada correctamente');
+                    
                     crearTareaForm.reset();
                 } else {
-                    alert('Por favor, completa todos los campos y selecciona un equipo.');
+                    mostrarSnackbar('Por favor, completa todos los campos y selecciona un equipo', true);
                 }
             });
+            
+            // Función para mostrar snackbar
+            function mostrarSnackbar(mensaje, esError = false) {
+                // Eliminar snackbar existente si hay
+                const snackbarExistente = document.querySelector('.md-snackbar');
+                if (snackbarExistente) {
+                    snackbarExistente.remove();
+                }
+                
+                const snackbar = document.createElement('div');
+                snackbar.classList.add('md-snackbar');
+                snackbar.innerHTML = `
+                    <div class="md-snackbar__text">${mensaje}</div>
+                    <button class="md-snackbar__action">Cerrar</button>
+                `;
+                
+                if (esError) {
+                    snackbar.style.backgroundColor = 'var(--md-error)';
+                }
+                
+                document.body.appendChild(snackbar);
+                
+                // Mostrar el snackbar
+                setTimeout(() => {
+                    snackbar.classList.add('md-snackbar--visible');
+                }, 10);
+                
+                // Ocultar después de 4 segundos
+                setTimeout(() => {
+                    snackbar.classList.remove('md-snackbar--visible');
+                    setTimeout(() => {
+                        snackbar.remove();
+                    }, 300);
+                }, 4000);
+                
+                // Botón de cerrar
+                snackbar.querySelector('.md-snackbar__action').addEventListener('click', function() {
+                    snackbar.classList.remove('md-snackbar--visible');
+                    setTimeout(() => {
+                        snackbar.remove();
+                    }, 300);
+                });
+            }
 
             // Funciones para editar y eliminar tareas
             window.eliminarTarea = function (equipo, index) {
                 tareasPorEquipo[equipo].splice(index, 1);
                 renderizarTareas(equipo);
+                mostrarSnackbar('Tarea eliminada correctamente');
             };
 
             window.editarTarea = function (equipo, index) {
@@ -182,11 +352,20 @@
                 document.getElementById('complejidad-tarea').value = tarea.complejidad;
                 document.getElementById('fecha-vencimiento').value = tarea.fecha;
                 document.getElementById('usuario-asignado').value = tarea.usuario;
-                eliminarTarea(equipo, index);
+                
+                // Hacer scroll hacia el formulario
+                document.querySelector('.md-card').scrollIntoView({ behavior: 'smooth' });
+                
+                // Eliminar la tarea existente
+                tareasPorEquipo[equipo].splice(index, 1);
+                renderizarTareas(equipo);
+                
+                // Mostrar mensaje
+                mostrarSnackbar('Editando tarea. Completa el formulario y guarda los cambios.');
             };
-
-            // Renderizar tareas iniciales
-            renderizarTareas(equipoSelect.value);
+            
+            // Inicializar la lista vacía
+            equipoSelect.value = '';
         });
     </script>
 </body>

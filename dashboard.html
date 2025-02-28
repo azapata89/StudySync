@@ -4,91 +4,740 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <title>Dashboard | Estudio Colectivo UNAL</title>
+    <!-- Fuentes de Material Design -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- CSS de Material Design 3 -->
+    <link rel="stylesheet" href="material-study.css">
+    <!-- Estilos adicionales para el dashboard -->
+    <style>
+        .dashboard-content {
+            padding: var(--md-spacing-large) 0;
+        }
+
+        .stat-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--md-elevation-3);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 300;
+            color: var(--md-primary-50);
+            margin: var(--md-spacing-medium) 0;
+        }
+
+        .task-item {
+            display: flex;
+            align-items: center;
+            padding: var(--md-spacing-medium) 0;
+            border-bottom: 1px solid var(--md-surface-variant);
+        }
+
+        .task-item:last-child {
+            border-bottom: none;
+        }
+
+        .task-checkbox {
+            margin-right: var(--md-spacing-medium);
+        }
+
+        .task-details {
+            flex-grow: 1;
+        }
+
+        .task-title {
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .task-deadline {
+            font-size: var(--md-body-small);
+            color: var(--md-on-surface-variant);
+        }
+
+        .event-item {
+            display: flex;
+            padding: var(--md-spacing-medium) 0;
+            border-bottom: 1px solid var(--md-surface-variant);
+        }
+
+        .event-item:last-child {
+            border-bottom: none;
+        }
+
+        .event-date {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            border-radius: var(--md-radius-small);
+            background-color: var(--md-primary-90);
+            margin-right: var(--md-spacing-medium);
+        }
+
+        .event-day {
+            font-size: 1.2rem;
+            font-weight: 500;
+            color: var(--md-primary-50);
+        }
+
+        .event-month {
+            font-size: var(--md-body-small);
+            color: var(--md-primary-50);
+        }
+
+        .event-details {
+            flex-grow: 1;
+        }
+
+        .event-title {
+            font-weight: 500;
+            margin-bottom: 4px;
+        }
+
+        .event-time {
+            font-size: var(--md-body-small);
+            color: var(--md-on-surface-variant);
+        }
+
+        .chart-container {
+            height: 250px;
+            width: 100%;
+        }
+
+        .user-avatar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--md-primary-80);
+            color: var(--md-primary-40);
+            font-weight: 500;
+        }
+
+        /* Navegación de cajón responsive */
+        @media (max-width: 960px) {
+            .md-drawer {
+                transform: translateX(-100%);
+            }
+
+            .md-drawer--open {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                margin-left: 0;
+            }
+        }
+
+        /* Animaciones */
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-fadeUp {
+            animation: fadeUp 0.5s ease forwards;
+        }
+
+        .animate-delay-1 {
+            animation-delay: 0.1s;
+        }
+
+        .animate-delay-2 {
+            animation-delay: 0.2s;
+        }
+
+        .animate-delay-3 {
+            animation-delay: 0.3s;
+        }
+
+        .animate-delay-4 {
+            animation-delay: 0.4s;
+        }
+    </style>
 </head>
 
-<body class="bg-light">
-    <div class="container py-4">
-        <!-- Barra de navegación -->
-        <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm p-3 mb-4 rounded">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="#">Dashboard</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav me-auto">
-                        <li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
-                        <!-- <li class="nav-item"><a class="nav-link" href="admin-usuarios.html">Usuarios</a></li> -->
-                        <li class="nav-item"><a class="nav-link" href="grupos.html">Grupos</a></li>
-                        <li class="nav-item"><a class="nav-link" href="tareas.html">Tareas</a></li>
-                        <li class="nav-item"><a class="nav-link" href="calendario.html">Calendario</a></li>
-                        <li class="nav-item"><a class="nav-link" href="resumenes.html">Resumenes</a></li>
-                        <li class="nav-item"><a class="nav-link" href="chat.html">Chat</a></li>
-                        <li class="nav-item"><a class="nav-link" href="evaluaciones.html">Evaluaciones</a></li>
-                    </ul>
-                    <div class="d-flex align-items-center">
-                        <span id="user-name" class="me-2 fw-bold">Usuario</span>
-                        <div class="rounded-circle bg-secondary d-flex justify-content-center align-items-center"
-                            style="width: 40px; height: 40px;">
-                            <i class="bi bi-person text-white"></i>
+<body>
+    <!-- Navegación de cajón -->
+    <aside class="md-drawer" id="main-drawer">
+        <div class="md-drawer__header">
+            <div class="md-drawer__title">Estudio Colectivo UNAL</div>
+        </div>
+        <div class="md-drawer__content">
+            <ul class="md-nav-list">
+                <li class="md-nav-list__item md-nav-list__item--active">
+                    <a href="dashboard.html" class="md-nav-list__link">
+                        <span class="material-icons md-nav-list__icon">dashboard</span>
+                        <span class="md-nav-list__text">Dashboard</span>
+                    </a>
+                </li>
+                <li class="md-nav-list__item">
+                    <a href="grupos.html" class="md-nav-list__link">
+                        <span class="material-icons md-nav-list__icon">groups</span>
+                        <span class="md-nav-list__text">Grupos</span>
+                    </a>
+                </li>
+                <li class="md-nav-list__item">
+                    <a href="tareas.html" class="md-nav-list__link">
+                        <span class="material-icons md-nav-list__icon">assignment</span>
+                        <span class="md-nav-list__text">Tareas</span>
+                    </a>
+                </li>
+                <li class="md-nav-list__item">
+                    <a href="calendario.html" class="md-nav-list__link">
+                        <span class="material-icons md-nav-list__icon">calendar_month</span>
+                        <span class="md-nav-list__text">Calendario</span>
+                    </a>
+                </li>
+                <li class="md-nav-list__item">
+                    <a href="resumenes.html" class="md-nav-list__link">
+                        <span class="material-icons md-nav-list__icon">summarize</span>
+                        <span class="md-nav-list__text">Resúmenes</span>
+                    </a>
+                </li>
+                <li class="md-nav-list__item">
+                    <a href="chat.html" class="md-nav-list__link">
+                        <span class="material-icons md-nav-list__icon">chat</span>
+                        <span class="md-nav-list__text">Chat</span>
+                    </a>
+                </li>
+                <li class="md-nav-list__item">
+                    <a href="evaluaciones.html" class="md-nav-list__link">
+                        <span class="material-icons md-nav-list__icon">grade</span>
+                        <span class="md-nav-list__text">Evaluaciones</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </aside>
+
+    <!-- Overlay para cajón de navegación -->
+    <div class="md-drawer__overlay" id="drawer-overlay"></div>
+
+    <!-- Barra superior -->
+    <header class="md-top-app-bar">
+        <div class="md-top-app-bar__row">
+            <section class="md-top-app-bar__section">
+                <span id="menu-button" class="material-icons md-top-app-bar__nav-icon">menu</span>
+                <span class="md-top-app-bar__title">Dashboard</span>
+            </section>
+            <section class="md-top-app-bar__section md-top-app-bar__section--align-end">
+                <span class="material-icons md-top-app-bar__action-item">notifications</span>
+                <span class="material-icons md-top-app-bar__action-item">search</span>
+                <div class="md-top-app-bar__action-item user-avatar">AS</div>
+            </section>
+        </div>
+    </header>
+
+    <!-- Contenido principal -->
+    <main class="container">
+        <div class="dashboard-content">
+            <!-- Estadísticas -->
+            <div class="md-layout-grid">
+                <div
+                    class="md-layout-grid__cell md-layout-grid__cell--span-3-desktop md-layout-grid__cell--span-4-tablet animate-fadeUp">
+                    <div class="md-card stat-card">
+                        <h3 class="md-card__subtitle">Tareas completadas</h3>
+                        <div class="stat-value">5</div>
+                        <div class="md-body-medium">de 8 tareas asignadas</div>
+                    </div>
+                </div>
+                <div
+                    class="md-layout-grid__cell md-layout-grid__cell--span-3-desktop md-layout-grid__cell--span-4-tablet animate-fadeUp animate-delay-1">
+                    <div class="md-card stat-card">
+                        <h3 class="md-card__subtitle">Reuniones esta semana</h3>
+                        <div class="stat-value">3</div>
+                        <div class="md-body-medium">Próxima: Hoy, 3:00 PM</div>
+                    </div>
+                </div>
+                <div
+                    class="md-layout-grid__cell md-layout-grid__cell--span-3-desktop md-layout-grid__cell--span-4-tablet animate-fadeUp animate-delay-2">
+                    <div class="md-card stat-card">
+                        <h3 class="md-card__subtitle">Horas estudiadas</h3>
+                        <div class="stat-value">12</div>
+                        <div class="md-body-medium">Meta semanal: 20 horas</div>
+                    </div>
+                </div>
+                <div
+                    class="md-layout-grid__cell md-layout-grid__cell--span-3-desktop md-layout-grid__cell--span-4-tablet animate-fadeUp animate-delay-3">
+                    <div class="md-card stat-card">
+                        <h3 class="md-card__subtitle">Puntos obtenidos</h3>
+                        <div class="stat-value">120</div>
+                        <div class="md-body-medium">Nivel: Estudiante Avanzado</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Gráficos y listas -->
+            <div class="md-layout-grid">
+                <!-- Métricas de Participación Mejoradas -->
+                <div class="md-layout-grid__cell md-layout-grid__cell--span-6-desktop animate-fadeUp animate-delay-1">
+                    <div class="md-card">
+                        <h2 class="md-card__title">Métricas de Participación</h2>
+                        <!-- Selector de Tiempo -->
+                        <div class="time-selector">
+                            <button class="md-button md-button--text time-btn active" data-period="week">Semana</button>
+                            <button class="md-button md-button--text time-btn" data-period="month">Mes</button>
+                            <button class="md-button md-button--text time-btn" data-period="semester">Semestre</button>
+                        </div>
+                        <!-- Contenedor del Gráfico -->
+                        <div class="chart-container">
+                            <canvas id="participation-chart"></canvas>
+                        </div>
+                        <!-- Análisis de Métricas -->
+                        <div class="metrics-analysis md-mt-medium">
+                            <div class="md-divider"></div>
+                            <h3 class="md-title-medium md-mt-medium md-mb-small">Análisis Semanal</h3>
+
+                            <div class="md-layout-grid md-mt-medium">
+                                <div class="md-layout-grid__cell md-layout-grid__cell--span-4">
+                                    <div class="stat-label">Horas estudiadas</div>
+                                    <div class="stat-value-small">15.7 / 20 horas</div>
+                                    <div class="md-progress md-mt-small">
+                                        <div class="md-progress__bar" style="width: 78%;"></div>
+                                    </div>
+                                    <div class="stat-caption">78% de la meta semanal</div>
+                                </div>
+
+                                <div class="md-layout-grid__cell md-layout-grid__cell--span-4">
+                                    <div class="stat-label">Tareas completadas</div>
+                                    <div class="stat-value-small">7 / 10 tareas</div>
+                                    <div class="md-progress md-mt-small">
+                                        <div class="md-progress__bar" style="width: 70%;"></div>
+                                    </div>
+                                    <div class="stat-caption">70% completado</div>
+                                </div>
+
+                                <div class="md-layout-grid__cell md-layout-grid__cell--span-4">
+                                    <div class="stat-label">Días más productivos</div>
+                                    <div class="stat-value-small">Jueves, Martes</div>
+                                    <div class="stat-caption">Basado en horas de estudio</div>
+                                </div>
+                            </div>
+
+                            <div class="md-banner md-banner--info md-mt-medium">
+                                <span class="material-icons md-banner__icon">tips_and_updates</span>
+                                <div class="md-banner__content">
+                                    <div class="md-banner__title">Sugerencia de estudio</div>
+                                    <div class="md-banner__message">
+                                        Tu productividad es mayor en las mañanas. Considera programar tus sesiones de
+                                        estudio más importantes durante ese horario.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="md-card__actions">
+                            <button class="md-button md-button--text">Ver estadísticas detalladas</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Eventos Próximos -->
+                <div class="md-layout-grid__cell md-layout-grid__cell--span-6-desktop animate-fadeUp animate-delay-2">
+                    <div class="md-card">
+                        <h2 class="md-card__title">Eventos Próximos</h2>
+                        <div id="upcoming-events">
+                            <div class="event-item">
+                                <div class="event-date">
+                                    <div class="event-day">24</div>
+                                    <div class="event-month">Feb</div>
+                                </div>
+                                <div class="event-details">
+                                    <div class="event-title">Reunión de Matemáticas</div>
+                                    <div class="event-time">10:00 AM - 12:00 PM</div>
+                                </div>
+                                <button class="md-button md-button--text">
+                                    <span class="material-icons">event</span>
+                                </button>
+                            </div>
+                            <div class="event-item">
+                                <div class="event-date">
+                                    <div class="event-day">24</div>
+                                    <div class="event-month">Feb</div>
+                                </div>
+                                <div class="event-details">
+                                    <div class="event-title">Entrega de Tarea de Historia</div>
+                                    <div class="event-time">11:59 PM</div>
+                                </div>
+                                <button class="md-button md-button--text">
+                                    <span class="material-icons">event</span>
+                                </button>
+                            </div>
+                            <div class="event-item">
+                                <div class="event-date">
+                                    <div class="event-day">25</div>
+                                    <div class="event-month">Feb</div>
+                                </div>
+                                <div class="event-details">
+                                    <div class="event-title">Examen de Física</div>
+                                    <div class="event-time">2:00 PM - 4:00 PM</div>
+                                </div>
+                                <button class="md-button md-button--text">
+                                    <span class="material-icons">event</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tareas Pendientes -->
+                <div class="md-layout-grid__cell md-layout-grid__cell--span-6-desktop animate-fadeUp animate-delay-3">
+                    <div class="md-card">
+                        <h2 class="md-card__title">Tareas Pendientes</h2>
+                        <div id="pending-tasks">
+                            <div class="task-item">
+                                <label class="md-checkbox task-checkbox">
+                                    <input type="checkbox" class="md-checkbox__input">
+                                    <span class="md-checkbox__box"></span>
+                                </label>
+                                <div class="task-details">
+                                    <div class="task-title">Terminar ensayo de Literatura</div>
+                                    <div class="task-deadline">Vence en 2 días</div>
+                                </div>
+                                <button class="md-button md-button--icon">
+                                    <span class="material-icons">more_vert</span>
+                                </button>
+                            </div>
+                            <div class="task-item">
+                                <label class="md-checkbox task-checkbox">
+                                    <input type="checkbox" class="md-checkbox__input">
+                                    <span class="md-checkbox__box"></span>
+                                </label>
+                                <div class="task-details">
+                                    <div class="task-title">Estudiar para el examen de Física</div>
+                                    <div class="task-deadline">Vence en 3 días</div>
+                                </div>
+                                <button class="md-button md-button--icon">
+                                    <span class="material-icons">more_vert</span>
+                                </button>
+                            </div>
+                            <div class="task-item">
+                                <label class="md-checkbox task-checkbox">
+                                    <input type="checkbox" class="md-checkbox__input">
+                                    <span class="md-checkbox__box"></span>
+                                </label>
+                                <div class="task-details">
+                                    <div class="task-title">Preparar presentación de Biología</div>
+                                    <div class="task-deadline">Vence en 5 días</div>
+                                </div>
+                                <button class="md-button md-button--icon">
+                                    <span class="material-icons">more_vert</span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="md-card__actions">
+                            <button class="md-button md-button--text">Ver todas las tareas</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Progreso de Estudio -->
+                <div class="md-layout-grid__cell md-layout-grid__cell--span-6-desktop animate-fadeUp animate-delay-4">
+                    <div class="md-card">
+                        <h2 class="md-card__title">Progreso de Estudio</h2>
+                        <div>
+                            <h3 class="md-title-small">Matemáticas</h3>
+                            <div class="md-progress">
+                                <div class="md-progress__bar" style="width: 75%;"></div>
+                            </div>
+                            <div class="md-body-small"
+                                style="text-align: right; margin-bottom: var(--md-spacing-medium);">75%</div>
+
+                            <h3 class="md-title-small">Física</h3>
+                            <div class="md-progress">
+                                <div class="md-progress__bar" style="width: 45%;"></div>
+                            </div>
+                            <div class="md-body-small"
+                                style="text-align: right; margin-bottom: var(--md-spacing-medium);">45%</div>
+
+                            <h3 class="md-title-small">Historia</h3>
+                            <div class="md-progress">
+                                <div class="md-progress__bar" style="width: 90%;"></div>
+                            </div>
+                            <div class="md-body-small"
+                                style="text-align: right; margin-bottom: var(--md-spacing-medium);">90%</div>
+
+                            <h3 class="md-title-small">Literatura</h3>
+                            <div class="md-progress">
+                                <div class="md-progress__bar" style="width: 60%;"></div>
+                            </div>
+                            <div class="md-body-small" style="text-align: right;">60%</div>
+                        </div>
+                        <div class="md-card__actions">
+                            <button class="md-button md-button--text">Ver detalles</button>
                         </div>
                     </div>
                 </div>
             </div>
-        </nav>
-
-        <!-- Contenido principal -->
-        <div class="row">
-            <div class="col-md-6">
-                <div class="card mb-4 shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">Resumen de Actividades</h5>
-                        <p class="card-text">Tareas completadas: <span id="completed-tasks">5</span></p>
-                        <p class="card-text">Reuniones esta semana: <span id="meetings-this-week">3</span></p>
-                        <p class="card-text">Puntos obtenidos: <span id="points-earned">120</span></p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="card mb-4 shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">Métricas de Participación</h5>
-                        <canvas id="participation-chart"></canvas>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="card mb-4 shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">Eventos Próximos</h5>
-                        <ul id="upcoming-events" class="list-group">
-                            <li class="list-group-item">Reunión de Matemáticas - 10:00 AM</li>
-                            <li class="list-group-item">Entrega de Tarea de Historia - 11:59 PM</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="card mb-4 shadow-sm">
-                    <div class="card-body">
-                        <h5 class="card-title">Tareas Pendientes</h5>
-                        <ul id="pending-tasks" class="list-group">
-                            <li class="list-group-item">Terminar ensayo de Literatura</li>
-                            <li class="list-group-item">Estudiar para el examen de Física</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
         </div>
-    </div>
+    </main>
+
+    <!-- Botón de acción flotante -->
+    <button class="md-fab" id="add-button">
+        <span class="material-icons">add</span>
+    </button>
 
     <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="dashboard.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Navegación de cajón
+            const drawer = document.getElementById('main-drawer');
+            const drawerOverlay = document.getElementById('drawer-overlay');
+            const menuButton = document.getElementById('menu-button');
+
+            function toggleDrawer() {
+                drawer.classList.toggle('md-drawer--open');
+                drawerOverlay.classList.toggle('md-drawer__overlay--open');
+            }
+
+            menuButton.addEventListener('click', toggleDrawer);
+            drawerOverlay.addEventListener('click', toggleDrawer);
+
+            // Manejar clics en los elementos de navegación
+            const navItems = document.querySelectorAll('.md-nav-list__item');
+            navItems.forEach(item => {
+                item.addEventListener('click', function () {
+                    navItems.forEach(i => i.classList.remove('md-nav-list__item--active'));
+                    this.classList.add('md-nav-list__item--active');
+
+                    // En pantallas pequeñas, cerrar el cajón después de seleccionar
+                    if (window.innerWidth < 960) {
+                        toggleDrawer();
+                    }
+                });
+            });
+
+            // Inicializar gráfico de participación
+            const ctx = document.getElementById('participation-chart').getContext('2d');
+            const participationChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'],
+                    datasets: [{
+                        label: 'Horas de estudio',
+                        data: [2, 3, 1, 4, 2, 0, 0],
+                        backgroundColor: 'rgba(25, 118, 210, 0.2)',
+                        borderColor: 'rgba(25, 118, 210, 1)',
+                        borderWidth: 2,
+                        tension: 0.3,
+                        pointBackgroundColor: 'rgba(25, 118, 210, 1)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    }
+                }
+            });
+
+            // Mostrar un snackbar cuando se completan tareas
+            const checkboxes = document.querySelectorAll('.md-checkbox__input');
+            checkboxes.forEach(checkbox => {
+                checkbox.addEventListener('change', function () {
+                    if (this.checked) {
+                        const taskTitle = this.closest('.task-item').querySelector('.task-title').textContent;
+                        showSnackbar(`Tarea "${taskTitle}" marcada como completada`);
+                    }
+                });
+            });
+
+            // Botón de acción flotante
+            const addButton = document.getElementById('add-button');
+            addButton.addEventListener('click', function () {
+                showDialog('Agregar nueva actividad',
+                    'Selecciona el tipo de actividad que deseas agregar:',
+                    [
+                        { text: 'Tarea', action: () => navigateTo('tareas.html') },
+                        { text: 'Evento', action: () => navigateTo('calendario.html') },
+                        { text: 'Grupo', action: () => navigateTo('grupos.html') }
+                    ]);
+            });
+
+            // Funciones auxiliares
+            function showSnackbar(message, action = null) {
+                // Eliminar snackbar existente si hay alguno
+                const existingSnackbar = document.querySelector('.md-snackbar');
+                if (existingSnackbar) {
+                    existingSnackbar.remove();
+                }
+
+                // Crear nuevo snackbar
+                const snackbar = document.createElement('div');
+                snackbar.className = 'md-snackbar';
+
+                // Agregar mensaje
+                const text = document.createElement('div');
+                text.className = 'md-snackbar__text';
+                text.textContent = message;
+                snackbar.appendChild(text);
+
+                // Agregar botón de acción si se proporciona
+                if (action) {
+                    const actionButton = document.createElement('button');
+                    actionButton.className = 'md-snackbar__action';
+                    actionButton.textContent = action.text;
+                    actionButton.addEventListener('click', action.handler);
+                    snackbar.appendChild(actionButton);
+                }
+
+                // Agregar al DOM
+                document.body.appendChild(snackbar);
+
+                // Mostrar el snackbar después de un breve retraso
+                setTimeout(() => {
+                    snackbar.classList.add('md-snackbar--visible');
+                }, 10);
+
+                // Ocultar después de 5 segundos
+                setTimeout(() => {
+                    snackbar.classList.remove('md-snackbar--visible');
+                    setTimeout(() => {
+                        snackbar.remove();
+                    }, 300);
+                }, 5000);
+            }
+
+            function showDialog(title, content, actions) {
+                // Crear contenedor del diálogo
+                const dialogContainer = document.createElement('div');
+                dialogContainer.className = 'md-dialog-container';
+
+                // Crear overlay
+                const overlay = document.createElement('div');
+                overlay.className = 'md-dialog-overlay';
+                dialogContainer.appendChild(overlay);
+
+                // Crear diálogo
+                const dialog = document.createElement('div');
+                dialog.className = 'md-dialog';
+
+                // Cabecera del diálogo
+                const header = document.createElement('div');
+                header.className = 'md-dialog__header';
+                const titleElement = document.createElement('h2');
+                titleElement.className = 'md-dialog__title';
+                titleElement.textContent = title;
+                header.appendChild(titleElement);
+                dialog.appendChild(header);
+
+                // Contenido del diálogo
+                const dialogContent = document.createElement('div');
+                dialogContent.className = 'md-dialog__content';
+                dialogContent.textContent = content;
+                dialog.appendChild(dialogContent);
+
+                // Acciones del diálogo
+                const dialogActions = document.createElement('div');
+                dialogActions.className = 'md-dialog__actions';
+
+                // Agregar botón de cancelar
+                const cancelButton = document.createElement('button');
+                cancelButton.className = 'md-button md-button--text';
+                cancelButton.textContent = 'Cancelar';
+                cancelButton.addEventListener('click', () => {
+                    dialogContainer.classList.remove('md-dialog-container--open');
+                    setTimeout(() => {
+                        dialogContainer.remove();
+                    }, 300);
+                });
+                dialogActions.appendChild(cancelButton);
+
+                // Agregar botones de acción
+                actions.forEach(action => {
+                    const button = document.createElement('button');
+                    button.className = 'md-button md-button--text';
+                    button.textContent = action.text;
+                    button.addEventListener('click', () => {
+                        dialogContainer.classList.remove('md-dialog-container--open');
+                        setTimeout(() => {
+                            dialogContainer.remove();
+                            action.action();
+                        }, 300);
+                    });
+                    dialogActions.appendChild(button);
+                });
+
+                dialog.appendChild(dialogActions);
+                dialogContainer.appendChild(dialog);
+
+                // Agregar al DOM
+                document.body.appendChild(dialogContainer);
+
+                // Mostrar el diálogo después de un breve retraso
+                setTimeout(() => {
+                    dialogContainer.classList.add('md-dialog-container--open');
+                }, 10);
+            }
+
+            function navigateTo(url) {
+                window.location.href = url;
+            }
+
+            // Obtener la URL actual
+            const currentPage = window.location.pathname.split('/').pop();
+
+            // Encontrar todos los enlaces de navegación
+            const navLinks = document.querySelectorAll('.md-nav-list__link');
+
+            // Marcar el enlace activo según la página actual
+            navLinks.forEach(link => {
+                const linkPage = link.getAttribute('href');
+                const parentItem = link.parentElement;
+
+                // Si estamos en la página de inicio (index.html) o en la página actual
+                if ((currentPage === '' || currentPage === 'index.html') && linkPage === 'dashboard.html') {
+                    parentItem.classList.add('md-nav-list__item--active');
+                } else if (linkPage === currentPage) {
+                    // Remover la clase activa de todos los elementos
+                    document.querySelectorAll('.md-nav-list__item').forEach(item => {
+                        item.classList.remove('md-nav-list__item--active');
+                    });
+
+                    // Agregar la clase activa al elemento actual
+                    parentItem.classList.add('md-nav-list__item--active');
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

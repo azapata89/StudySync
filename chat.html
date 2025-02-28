@@ -4,64 +4,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat Grupal</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+    <title>Chat Grupal - Estudio Colectivo UNAL</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="material-study.css">
     <style>
         .message {
             max-width: 80%;
-            margin-bottom: 1rem;
+            margin-bottom: var(--md-spacing-medium);
+            padding: var(--md-spacing-medium);
+            border-radius: var(--md-radius-medium);
+            box-shadow: var(--md-elevation-1);
+            transition: box-shadow 0.3s;
+        }
+
+        .message:hover {
+            box-shadow: var(--md-elevation-2);
         }
 
         .message-user {
             margin-left: auto;
-            background-color: #007bff;
-            color: white;
+            background-color: var(--md-primary-50);
+            color: var(--md-on-primary);
         }
 
         .message-other {
             margin-right: auto;
-            background-color: #e9ecef;
+            background-color: var(--md-surface-variant);
+            color: var(--md-on-surface);
         }
 
         .message-ai {
             margin-right: auto;
-            background-color: #28a745;
-            color: white;
+            background-color: var(--md-secondary-50);
+            color: var(--md-on-secondary);
         }
 
         .message-system {
             width: 100%;
-            background-color: #f8f9fa;
+            background-color: var(--md-surface);
+            color: var(--md-on-surface-variant);
             text-align: center;
             font-style: italic;
+            border: 1px solid var(--md-surface-variant);
         }
 
         .file-preview {
             max-width: 200px;
             max-height: 200px;
             object-fit: cover;
+            cursor: pointer;
+            border-radius: var(--md-radius-small);
+            transition: transform 0.2s;
+        }
+
+        .file-preview:hover {
+            transform: scale(1.05);
         }
 
         .message-actions {
             font-size: 0.8rem;
             opacity: 0.7;
+            display: flex;
+            align-items: center;
+            gap: var(--md-spacing-small);
         }
 
-        .message-actions i {
+        .message-actions .material-icons {
+            font-size: 16px;
             cursor: pointer;
-            margin-left: 0.5rem;
+            transition: color 0.2s;
         }
 
-        .message-actions i:hover {
-            opacity: 1;
+        .message-actions .material-icons:hover {
+            color: var(--md-primary-40);
         }
 
         .typing-indicator {
             display: none;
-            padding: 0.5rem;
-            margin-bottom: 1rem;
+            padding: var(--md-spacing-small);
+            margin-bottom: var(--md-spacing-medium);
+            border-radius: var(--md-radius-small);
+            background-color: var(--md-surface-variant);
+            width: fit-content;
         }
 
         .dot {
@@ -69,7 +94,7 @@
             width: 8px;
             height: 8px;
             margin-right: 3px;
-            background: #007bff;
+            background: var(--md-primary-50);
             border-radius: 50%;
             animation: wave 1.3s linear infinite;
         }
@@ -83,171 +108,439 @@
         }
 
         @keyframes wave {
-
-            0%,
-            60%,
-            100% {
+            0%, 60%, 100% {
                 transform: initial;
             }
-
             30% {
                 transform: translateY(-10px);
             }
         }
+
+        .mensajes-container {
+            overflow-y: auto;
+            padding: var(--md-spacing-medium);
+            background-color: var(--md-background);
+            border-radius: var(--md-radius-medium);
+        }
+
+        .cursor-pointer {
+            cursor: pointer;
+        }
+
+        .chat-input {
+            display: flex;
+            gap: var(--md-spacing-small);
+            padding: var(--md-spacing-medium);
+            background-color: var(--md-surface);
+            border-radius: var(--md-radius-medium);
+            margin-top: var(--md-spacing-medium);
+        }
+
+        .chat-input .md-text-field {
+            flex-grow: 1;
+            margin-bottom: 0;
+        }
+
+        .conversacion-item {
+            transition: background-color 0.3s;
+            cursor: pointer;
+            border-left: 4px solid transparent;
+        }
+
+        .conversacion-item:hover {
+            background-color: var(--md-surface-variant);
+        }
+
+        .conversacion-item--active {
+            background-color: var(--md-primary-95);
+            border-left-color: var(--md-primary-50);
+        }
+
+        .favorite-icon {
+            color: var(--md-warning);
+        }
     </style>
 </head>
 
-<body class="bg-light">
-    <div class="container py-4">
-        <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm p-3 mb-4">
-            <div class="container-fluid">
-                <a class="navbar-brand" href="#">Calendario de Reuniones</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNav">
-                    <ul class="navbar-nav me-auto">
-                        <li class="nav-item"><a class="nav-link" href="dashboard.html">Dashboard</a></li>
-                        <!-- <li class="nav-item"><a class="nav-link" href="admin-usuarios.html">Usuarios</a></li> -->
-                        <li class="nav-item"><a class="nav-link" href="grupos.html">Grupos</a></li>
-                        <li class="nav-item"><a class="nav-link" href="tareas.html">Tareas</a></li>
-                        <li class="nav-item"><a class="nav-link" href="calendario.html">Calendario</a></li>
-                        <li class="nav-item"><a class="nav-link" href="resumenes.html">Resúmenes</a></li>
-                        <li class="nav-item"><a class="nav-link" href="chat.html">Chat</a></li>
-                        <li class="nav-item"><a class="nav-link" href="evaluaciones.html">Evaluaciones</a></li>
-                    </ul>
-                    <div class="d-flex align-items-center">
-                        <span id="user-name" class="me-2 fw-bold">Usuario</span>
-                        <div class="rounded-circle bg-secondary d-flex justify-content-center align-items-center"
-                            style="width: 40px; height: 40px;">
-                            <i class="bi bi-person text-white"></i>
-                        </div>
+<body>
+    <!-- Barra superior -->
+    <header class="md-top-app-bar">
+        <div class="md-top-app-bar__row">
+            <section class="md-top-app-bar__section">
+                <span class="md-top-app-bar__nav-icon" id="menu-toggle">
+                    <span class="material-icons">menu</span>
+                </span>
+                <span class="md-top-app-bar__title">Chat Grupal</span>
+            </section>
+            <section class="md-top-app-bar__section--align-end">
+                <div class="md-top-app-bar__action-item">
+                    <span class="material-icons">notifications</span>
+                </div>
+                <div class="md-top-app-bar__action-item" id="theme-toggle">
+                    <span class="material-icons">dark_mode</span>
+                </div>
+                <div class="md-top-app-bar__action-item">
+                    <div class="md-avatar md-avatar--small">
+                        <span>U</span>
                     </div>
                 </div>
-            </div>
-        </nav>
+            </section>
+        </div>
+    </header>
+
+    <!-- Navegación lateral -->
+    <div class="md-drawer" id="nav-drawer">
+        <div class="md-drawer__header">
+            <div class="md-drawer__title">Estudio Colectivo UNAL</div>
+        </div>
+        <div class="md-drawer__content">
+            <nav class="md-nav-list">
+                <a href="dashboard.html" class="md-nav-list__item">
+                    <span class="md-nav-list__icon material-icons">dashboard</span>
+                    <span class="md-nav-list__text">Dashboard</span>
+                </a>
+                <a href="grupos.html" class="md-nav-list__item">
+                    <span class="md-nav-list__icon material-icons">group</span>
+                    <span class="md-nav-list__text">Grupos</span>
+                </a>
+                <a href="tareas.html" class="md-nav-list__item">
+                    <span class="md-nav-list__icon material-icons">assignment</span>
+                    <span class="md-nav-list__text">Tareas</span>
+                </a>
+                <a href="calendario.html" class="md-nav-list__item">
+                    <span class="md-nav-list__icon material-icons">calendar_today</span>
+                    <span class="md-nav-list__text">Calendario</span>
+                </a>
+                <a href="resumenes.html" class="md-nav-list__item">
+                    <span class="md-nav-list__icon material-icons">summarize</span>
+                    <span class="md-nav-list__text">Resúmenes</span>
+                </a>
+                <a href="chat.html" class="md-nav-list__item md-nav-list__item--active">
+                    <span class="md-nav-list__icon material-icons">chat</span>
+                    <span class="md-nav-list__text">Chat</span>
+                </a>
+                <a href="evaluaciones.html" class="md-nav-list__item">
+                    <span class="md-nav-list__icon material-icons">assignment_turned_in</span>
+                    <span class="md-nav-list__text">Evaluaciones</span>
+                </a>
+            </nav>
+        </div>
     </div>
-    <!-- Contenedor principal -->
-    <div class="container">
-        <div class="row">
+    <div class="md-drawer__overlay" id="drawer-overlay"></div>
+
+    <!-- Contenido principal -->
+    <main class="container md-mt-large">
+        <div class="md-layout-grid">
             <!-- Lista de conversaciones -->
-            <div class="col-md-4">
-                <div class="card shadow-sm mb-4">
-                    <div class="card-body">
-                        <h5 class="card-title mb-3">Conversaciones</h5>
-                        <div class="input-group mb-3">
-                            <input type="text" class="form-control" placeholder="Buscar conversación...">
-                            <button class="btn btn-outline-secondary" type="button">
-                                <i class="bi bi-search"></i>
-                            </button>
+            <div class="md-layout-grid__cell md-layout-grid__cell--span-4-desktop md-layout-grid__cell--span-12-tablet">
+                <div class="md-card" style="height: calc(100% - var(--md-spacing-medium));">
+                    <h4 class="md-card__title">
+                        <span class="material-icons md-mr-small" style="vertical-align: middle;">forum</span>
+                        Conversaciones
+                    </h4>
+                    <div class="md-card__content" style="display: flex; flex-direction: column; height: calc(100% - 120px);">
+                        <div class="md-text-field md-mb-medium">
+                            <input type="text" id="buscar-conversacion" class="md-text-field__input" placeholder=" ">
+                            <label for="buscar-conversacion" class="md-text-field__label">Buscar conversación</label>
+                            <span class="material-icons" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%);">search</span>
                         </div>
-                        <ul class="list-group">
-                            <li class="list-group-item list-group-item-action active d-flex justify-content-between align-items-center"
-                                onclick="cargarConversacion('Grupo de Matemáticas')">
-                                <div>
-                                    <i class="bi bi-people-fill me-2"></i>
-                                    Grupo de Matemáticas
+
+                        <div class="md-list" style="flex-grow: 1; overflow-y: auto;">
+                            <div class="md-list__item conversacion-item conversacion-item--active" onclick="cargarConversacion('Grupo de Matemáticas')">
+                                <span class="md-list__icon material-icons">group</span>
+                                <div class="md-list__text">
+                                    <div class="md-list__primary-text">Grupo de Matemáticas</div>
+                                    <div class="md-list__secondary-text">Última actividad: hace 5 min</div>
                                 </div>
-                                <span class="badge bg-primary rounded-pill">3</span>
-                            </li>
-                            <li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
-                                onclick="cargarConversacion('Grupo de Física')">
-                                <div>
-                                    <i class="bi bi-people me-2"></i>
-                                    Grupo de Física
+                                <div class="md-list__meta">
+                                    <span class="md-badge md-badge--small">3</span>
                                 </div>
-                                <span class="badge bg-secondary rounded-pill">1</span>
-                            </li>
-                            <li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center"
-                                onclick="cargarConversacion('Grupo de Historia')">
-                                <div>
-                                    <i class="bi bi-people me-2"></i>
-                                    Grupo de Historia
+                            </div>
+                            <div class="md-list__item conversacion-item" onclick="cargarConversacion('Grupo de Física')">
+                                <span class="md-list__icon material-icons">group</span>
+                                <div class="md-list__text">
+                                    <div class="md-list__primary-text">Grupo de Física</div>
+                                    <div class="md-list__secondary-text">Última actividad: hace 1 hora</div>
                                 </div>
-                            </li>
-                        </ul>
+                                <div class="md-list__meta">
+                                    <span class="md-badge md-badge--small">1</span>
+                                </div>
+                            </div>
+                            <div class="md-list__item conversacion-item" onclick="cargarConversacion('Grupo de Historia')">
+                                <span class="md-list__icon material-icons">group</span>
+                                <div class="md-list__text">
+                                    <div class="md-list__primary-text">Grupo de Historia</div>
+                                    <div class="md-list__secondary-text">Última actividad: ayer</div>
+                                </div>
+                            </div>
+                            <div class="md-list__item conversacion-item" onclick="cargarConversacion('Grupo de Programación')">
+                                <span class="md-list__icon material-icons">group</span>
+                                <div class="md-list__text">
+                                    <div class="md-list__primary-text">Grupo de Programación</div>
+                                    <div class="md-list__secondary-text">Última actividad: 20/02/2025</div>
+                                </div>
+                            </div>
+                            <div class="md-list__item conversacion-item" onclick="cargarConversacion('Grupo de Literatura')">
+                                <span class="md-list__icon material-icons">group</span>
+                                <div class="md-list__text">
+                                    <div class="md-list__primary-text">Grupo de Literatura</div>
+                                    <div class="md-list__secondary-text">Última actividad: 18/02/2025</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="md-card__actions">
+                        <button class="md-button md-button--text" id="nueva-conversacion">
+                            <span class="material-icons md-mr-small">add</span>
+                            Nueva conversación
+                        </button>
                     </div>
                 </div>
             </div>
 
             <!-- Área de chat -->
-            <div class="col-md-8">
-                <div class="card shadow-sm">
-                    <div class="card-header bg-white">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h5 class="mb-0" id="chat-title">Grupo de Matemáticas</h5>
-                            <div>
-                                <button class="btn btn-outline-secondary btn-sm me-2" data-bs-toggle="tooltip"
-                                    title="Ver archivos">
-                                    <i class="bi bi-folder2-open"></i>
-                                </button>
-                                <button class="btn btn-outline-secondary btn-sm" data-bs-toggle="tooltip"
-                                    title="Más opciones">
-                                    <i class="bi bi-three-dots-vertical"></i>
-                                </button>
-                            </div>
+            <div class="md-layout-grid__cell md-layout-grid__cell--span-8-desktop md-layout-grid__cell--span-12-tablet">
+                <div class="md-card" style="height: calc(100% - var(--md-spacing-medium)); display: flex; flex-direction: column;">
+                    <div class="md-card__title md-flex md-justify-between md-items-center">
+                        <div class="md-flex md-items-center">
+                            <span class="material-icons md-mr-small">group</span>
+                            <h4 id="chat-title" class="md-mb-small">Grupo de Matemáticas</h4>
+                        </div>
+                        <div>
+                            <button class="md-button md-button--icon" title="Ver archivos">
+                                <span class="material-icons">folder_open</span>
+                            </button>
+                            <button class="md-button md-button--icon" id="chat-options">
+                                <span class="material-icons">more_vert</span>
+                            </button>
                         </div>
                     </div>
-                    <div class="card-body d-flex flex-column" style="height: 500px;">
-                        <div id="mensajes" class="border rounded p-3 mb-3 overflow-auto flex-grow-1"
-                            style="height: 350px; background-color: #f8f9fa;">
+                    
+                    <div class="md-card__content" style="flex-grow: 1; display: flex; flex-direction: column; overflow: hidden;">
+                        <div id="mensajes" class="mensajes-container" style="flex-grow: 1; overflow-y: auto;">
+                            <!-- Los mensajes se cargarán dinámicamente aquí -->
                         </div>
+                        
                         <div class="typing-indicator">
                             <div class="dot"></div>
                             <div class="dot"></div>
                             <div class="dot"></div>
                         </div>
-                        <form id="formulario-chat" class="d-flex flex-column gap-2">
-                            <div class="input-group">
-                                <input type="text" id="input-mensaje" class="form-control"
-                                    placeholder="Escribe un mensaje..." required>
-                                <button type="button" class="btn btn-outline-secondary"
-                                    onclick="mostrarOpcionesArchivo()">
-                                    <i class="bi bi-paperclip"></i>
-                                </button>
-                                <button type="button" class="btn btn-outline-success" onclick="consultarIA()">
-                                    <i class="bi bi-robot"></i>
-                                </button>
-                                <button type="submit" class="btn btn-primary">
-                                    <i class="bi bi-send"></i>
-                                </button>
+                        
+                        <form id="formulario-chat" class="chat-input" style="margin-bottom: 0;">
+                            <div class="md-text-field md-w-full">
+                                <input type="text" id="input-mensaje" class="md-text-field__input" placeholder=" " required>
+                                <label for="input-mensaje" class="md-text-field__label">Escribe un mensaje...</label>
                             </div>
+                            
+                            <button type="button" class="md-button md-button--icon" onclick="mostrarOpcionesArchivo()" title="Adjuntar archivo">
+                                <span class="material-icons">attach_file</span>
+                            </button>
+                            
+                            <button type="button" class="md-button md-button--icon md-bg-secondary" style="color: var(--md-on-secondary);" onclick="consultarIA()" title="Consultar IA">
+                                <span class="material-icons">smart_toy</span>
+                            </button>
+                            
+                            <button type="submit" class="md-button md-button--icon md-bg-primary" style="color: var(--md-on-primary);">
+                                <span class="material-icons">send</span>
+                            </button>
+                            
                             <input type="file" id="input-archivo" class="d-none" onchange="manejarArchivo(event)">
                         </form>
                     </div>
                 </div>
             </div>
         </div>
+    </main>
+
+    <!-- Botón flotante para nueva conversación rápida -->
+    <div class="md-fab" id="nueva-conversacion-rapida">
+        <span class="material-icons">chat</span>
     </div>
 
-    <!-- Modal para preview de imágenes -->
-    <div class="modal fade" id="imagenModal" tabindex="-1">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Vista previa</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body text-center">
-                    <img id="imagenPreview" class="img-fluid" src="" alt="Preview">
-                </div>
+    <!-- Diálogo para preview de imágenes -->
+    <div class="md-dialog-container" id="imagenModalContainer">
+        <div class="md-dialog-overlay"></div>
+        <div class="md-dialog">
+            <div class="md-dialog__header">
+                <h3 class="md-dialog__title">Vista previa</h3>
+            </div>
+            <div class="md-dialog__content">
+                <img id="imagenPreview" class="img-fluid" style="max-width: 100%; border-radius: var(--md-radius-medium);" src="" alt="Preview">
+            </div>
+            <div class="md-dialog__actions">
+                <button class="md-button md-button--text" id="cerrarImagenModal">Cerrar</button>
+                <button class="md-button md-button--filled" id="descargarImagen">Descargar</button>
             </div>
         </div>
     </div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Diálogo para opciones de chat -->
+    <div class="md-dialog-container" id="opcionesChatContainer">
+        <div class="md-dialog-overlay"></div>
+        <div class="md-dialog">
+            <div class="md-dialog__header">
+                <h3 class="md-dialog__title">Opciones del chat</h3>
+            </div>
+            <div class="md-dialog__content">
+                <div class="md-list">
+                    <div class="md-list__item">
+                        <span class="md-list__icon material-icons">notifications</span>
+                        <div class="md-list__text">
+                            <div class="md-list__primary-text">Silenciar notificaciones</div>
+                        </div>
+                        <div class="md-list__meta">
+                            <label class="md-switch">
+                                <input type="checkbox" class="md-switch__input">
+                                <span class="md-switch__track"></span>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="md-list__item">
+                        <span class="md-list__icon material-icons">people_alt</span>
+                        <div class="md-list__text">
+                            <div class="md-list__primary-text">Ver miembros</div>
+                        </div>
+                    </div>
+                    <div class="md-list__item">
+                        <span class="md-list__icon material-icons">folder</span>
+                        <div class="md-list__text">
+                            <div class="md-list__primary-text">Archivos compartidos</div>
+                        </div>
+                    </div>
+                    <div class="md-list__item">
+                        <span class="md-list__icon material-icons">search</span>
+                        <div class="md-list__text">
+                            <div class="md-list__primary-text">Buscar en la conversación</div>
+                        </div>
+                    </div>
+                    <div class="md-list__item">
+                        <span class="md-list__icon material-icons">exit_to_app</span>
+                        <div class="md-list__text md-color-error">
+                            <div class="md-list__primary-text">Abandonar grupo</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="md-dialog__actions">
+                <button class="md-button md-button--text" id="cerrarOpcionesChat">Cerrar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Javascript -->
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
+            // UI Elements para Material Design
+            const menuToggle = document.getElementById('menu-toggle');
+            const navDrawer = document.getElementById('nav-drawer');
+            const drawerOverlay = document.getElementById('drawer-overlay');
+            const themeToggle = document.getElementById('theme-toggle');
+            
+            const imagenModalContainer = document.getElementById('imagenModalContainer');
+            const cerrarImagenModal = document.getElementById('cerrarImagenModal');
+            const descargarImagen = document.getElementById('descargarImagen');
+            
+            const opcionesChatContainer = document.getElementById('opcionesChatContainer');
+            const chatOptions = document.getElementById('chat-options');
+            const cerrarOpcionesChat = document.getElementById('cerrarOpcionesChat');
+            
+            const nuevaConversacionRapida = document.getElementById('nueva-conversacion-rapida');
+            
+            // Toggle del menú lateral
+            menuToggle.addEventListener('click', function() {
+                navDrawer.classList.toggle('md-drawer--open');
+                drawerOverlay.classList.toggle('md-drawer__overlay--open');
+            });
+
+            drawerOverlay.addEventListener('click', function() {
+                navDrawer.classList.remove('md-drawer--open');
+                drawerOverlay.classList.remove('md-drawer__overlay--open');
+            });
+
+            // Toggle del tema oscuro/claro
+            themeToggle.addEventListener('click', function() {
+                document.body.classList.toggle('dark-theme');
+                const icon = themeToggle.querySelector('.material-icons');
+                if (document.body.classList.contains('dark-theme')) {
+                    icon.textContent = 'light_mode';
+                } else {
+                    icon.textContent = 'dark_mode';
+                }
+            });
+            
+            // Manejar modales Material Design
+            cerrarImagenModal.addEventListener('click', function() {
+                imagenModalContainer.classList.remove('md-dialog-container--open');
+            });
+            
+            descargarImagen.addEventListener('click', function() {
+                mostrarSnackbar('Descargando imagen...');
+                // Aquí iría la lógica para descargar la imagen
+                setTimeout(() => {
+                    imagenModalContainer.classList.remove('md-dialog-container--open');
+                }, 1000);
+            });
+            
+            chatOptions.addEventListener('click', function() {
+                opcionesChatContainer.classList.add('md-dialog-container--open');
+            });
+            
+            cerrarOpcionesChat.addEventListener('click', function() {
+                opcionesChatContainer.classList.remove('md-dialog-container--open');
+            });
+            
+            // Botón flotante para nueva conversación rápida
+            nuevaConversacionRapida.addEventListener('click', function() {
+                mostrarSnackbar('Función de nueva conversación en desarrollo');
+            });
+            
+            // Función para mostrar snackbar
+            function mostrarSnackbar(mensaje, esError = false) {
+                // Eliminar snackbar existente si hay
+                const snackbarExistente = document.querySelector('.md-snackbar');
+                if (snackbarExistente) {
+                    snackbarExistente.remove();
+                }
+                
+                const snackbar = document.createElement('div');
+                snackbar.classList.add('md-snackbar');
+                snackbar.innerHTML = `
+                    <div class="md-snackbar__text">${mensaje}</div>
+                    <button class="md-snackbar__action">Cerrar</button>
+                `;
+                
+                if (esError) {
+                    snackbar.style.backgroundColor = 'var(--md-error)';
+                }
+                
+                document.body.appendChild(snackbar);
+                
+                // Mostrar el snackbar
+                setTimeout(() => {
+                    snackbar.classList.add('md-snackbar--visible');
+                }, 10);
+                
+                // Ocultar después de 4 segundos
+                setTimeout(() => {
+                    snackbar.classList.remove('md-snackbar--visible');
+                    setTimeout(() => {
+                        snackbar.remove();
+                    }, 300);
+                }, 4000);
+                
+                // Botón de cerrar
+                snackbar.querySelector('.md-snackbar__action').addEventListener('click', function() {
+                    snackbar.classList.remove('md-snackbar--visible');
+                    setTimeout(() => {
+                        snackbar.remove();
+                    }, 300);
+                });
+            }
+            
             const formularioChat = document.getElementById('formulario-chat');
             const inputMensaje = document.getElementById('input-mensaje');
             const mensajesContainer = document.getElementById('mensajes');
-
-            // Activar tooltips
-            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-            tooltipTriggerList.map(function (tooltipTriggerEl) {
-                return new bootstrap.Tooltip(tooltipTriggerEl);
-            });
 
             // Simulación de mensajes
             const mensajesSimulados = {
@@ -266,12 +559,23 @@
                 'Grupo de Historia': [
                     { tipo: 'system', texto: 'Bienvenido al grupo de Historia' },
                     { tipo: 'other', usuario: 'Prof. García', texto: 'Recuerden la entrega del ensayo' }
+                ],
+                'Grupo de Programación': [
+                    { tipo: 'system', texto: 'Bienvenido al grupo de Programación' },
+                    { tipo: 'other', usuario: 'Miguel', texto: 'Ya terminé el ejercicio de arrays' },
+                    { tipo: 'other', usuario: 'Laura', texto: '¿Alguien me puede ayudar con los bucles?' }
+                ],
+                'Grupo de Literatura': [
+                    { tipo: 'system', texto: 'Bienvenido al grupo de Literatura' },
+                    { tipo: 'other', usuario: 'Prof. Martínez', texto: 'Para la próxima clase, leer capítulos 3 y 4' },
+                    { tipo: 'other', usuario: 'Elena', texto: '¿Dónde puedo encontrar el libro?' },
+                    { tipo: 'user', texto: 'Está disponible en la biblioteca digital de la universidad' }
                 ]
             };
 
             function agregarMensaje(tipo, usuario, texto, archivo = null) {
                 const mensajeDiv = document.createElement('div');
-                mensajeDiv.classList.add('message', 'p-3', 'rounded');
+                mensajeDiv.classList.add('message');
 
                 let claseAdicional = '';
                 switch (tipo) {
@@ -293,14 +597,14 @@
                         contenido += `
                             <div class="mt-2">
                                 <img src="${URL.createObjectURL(archivo)}" 
-                                     class="file-preview rounded cursor-pointer" 
+                                     class="file-preview" 
                                      onclick="mostrarImagenCompleta('${URL.createObjectURL(archivo)}')"
                                      alt="Archivo adjunto">
                             </div>`;
                     } else {
                         contenido += `
-                            <div class="mt-2">
-                                <i class="bi bi-file-earmark-text"></i>
+                            <div class="mt-2 md-flex md-items-center">
+                                <span class="material-icons md-mr-small">description</span>
                                 ${archivo.name}
                             </div>`;
                     }
@@ -308,10 +612,10 @@
 
                 if (tipo !== 'system') {
                     contenido += `
-                        <div class="message-actions mt-1">
+                        <div class="message-actions">
                             <small>${new Date().toLocaleTimeString()}</small>
-                            <i class="bi bi-reply" onclick="responderMensaje('${usuario}')"></i>
-                            <i class="bi bi-star" onclick="marcarFavorito(this)"></i>
+                            <span class="material-icons" onclick="responderMensaje('${usuario}')">reply</span>
+                            <span class="material-icons" onclick="marcarFavorito(this)">star_outline</span>
                         </div>`;
                 }
 
@@ -320,31 +624,40 @@
                 mensajesContainer.scrollTop = mensajesContainer.scrollHeight;
             }
 
-            window.cargarConversacion = function (grupo) {
+            window.cargarConversacion = function(grupo) {
                 document.getElementById('chat-title').textContent = grupo;
                 mensajesContainer.innerHTML = '';
+                
+                // Actualizar elemento activo en la lista
+                document.querySelectorAll('.conversacion-item').forEach(item => {
+                    item.classList.remove('conversacion-item--active');
+                    if (item.textContent.includes(grupo)) {
+                        item.classList.add('conversacion-item--active');
+                    }
+                });
+                
                 mensajesSimulados[grupo].forEach(mensaje => {
-                    agregarMensaje(mensaje.tipo, mensaje.usuario, mensaje.texto);
+                    agregarMensaje(mensaje.tipo, mensaje.usuario || 'Tú', mensaje.texto);
                 });
             };
 
-            window.mostrarOpcionesArchivo = function () {
+            window.mostrarOpcionesArchivo = function() {
                 document.getElementById('input-archivo').click();
             };
 
-            window.manejarArchivo = function (event) {
+            window.manejarArchivo = function(event) {
                 const archivo = event.target.files[0];
                 if (archivo) {
                     agregarMensaje('user', 'Tú', 'Archivo adjunto:', archivo);
                 }
             };
 
-            window.mostrarImagenCompleta = function (url) {
+            window.mostrarImagenCompleta = function(url) {
                 document.getElementById('imagenPreview').src = url;
-                new bootstrap.Modal(document.getElementById('imagenModal')).show();
+                imagenModalContainer.classList.add('md-dialog-container--open');
             };
 
-            window.consultarIA = function () {
+            window.consultarIA = function() {
                 const typingIndicator = document.querySelector('.typing-indicator');
                 typingIndicator.style.display = 'block';
 
@@ -355,16 +668,21 @@
                 }, 1500);
             };
 
-            window.responderMensaje = function (usuario) {
+            window.responderMensaje = function(usuario) {
                 inputMensaje.value = `@${usuario} `;
                 inputMensaje.focus();
             };
 
-            window.marcarFavorito = function (elemento) {
-                elemento.classList.toggle('text-warning');
+            window.marcarFavorito = function(elemento) {
+                elemento.textContent = elemento.textContent === 'star_outline' ? 'star' : 'star_outline';
+                if (elemento.textContent === 'star') {
+                    elemento.classList.add('favorite-icon');
+                } else {
+                    elemento.classList.remove('favorite-icon');
+                }
             };
 
-            formularioChat.addEventListener('submit', function (event) {
+            formularioChat.addEventListener('submit', function(event) {
                 event.preventDefault();
                 const texto = inputMensaje.value.trim();
                 if (texto) {
@@ -378,5 +696,4 @@
         });
     </script>
 </body>
-
 </html>
